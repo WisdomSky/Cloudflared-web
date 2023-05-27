@@ -1,0 +1,128 @@
+<template>
+  <div>
+    <div>
+      <img src="./assets/cloudflare.png" class="cf-logo" alt="Cloudflare">
+    </div>
+    <form id="cf-form" method="post" @submit.prevent>
+      <div>
+        <div>
+          <h4>Enter Cloudflared Token</h4>
+        </div>
+        <input type="text" name="token" v-model="token">
+      </div>
+      <div>
+      <button v-if="changed || token.trim().length == 0" @click.prevent="save" style="margin-right:20px">Save</button>
+      <button v-if="token.trim().length" @click.prevent="start">{{ config.start ? 'Remove Service' : 'Install Tunnel Service' }}</button>
+    </div>
+    </form>
+  </div>
+</template>
+
+
+<script setup lang="ts">
+  import { ref, reactive, onBeforeMount, watch } from 'vue' 
+
+  const endpoint = "";
+
+  const config = reactive<{token: string,start:boolean}>({token: '', start: false});
+
+  const token = ref<string>('');
+
+  const changed = ref<boolean>(false);
+
+  onBeforeMount(async() => await init());
+
+
+  async function start() {
+
+    config.start = !config.start;
+    const res = await fetch(endpoint +'/start', {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    start: config.start
+                  })
+                })
+
+
+    if (res.status === 200) {
+      
+    } else {
+      alert('Failed to Start!');
+    }
+
+  }
+
+  async function save() {
+
+const res = await fetch(endpoint +'/token', {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                token: token.value
+              })
+            })
+
+  if (res.status === 200) {
+    changed.value = false;
+  }
+
+}
+
+  async function init() {
+    const res = await fetch(endpoint +'/config');
+
+    const json = await res.json();
+
+    config.token = json.token;
+    token.value = config.token;
+    config.start = json.start;
+
+    watch(token, () => changed.value = true);
+  }
+
+
+</script>
+
+
+<style scoped lang="scss">
+  .cf-logo {
+    height: 15vh;
+  }
+
+  input[type=text] {
+    width: 50vw;
+    max-width: 500px;
+    min-width: 300px;
+    outline: none;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 1.25em;
+  }
+
+  button {
+    margin-top: 20px;
+    background-color: #c98816;
+    outline: none;
+    border: 2px solid #f1c577;
+    padding: 10px 50px;
+    font-size: 1.25em;
+
+    &:hover {
+      opacity: 0.75;
+    }
+
+    &:active {
+      opacity: 1 !important;
+      box-shadow: 0 0 15px 0 #dbb378a0;
+      
+    }
+
+  }
+
+</style>

@@ -1,0 +1,6 @@
+app/fontend/node_modules
+app/fontend/package-lock.json
+app/backend/node_modules
+app/backend/package-lock.json
+app/fontend/p.vscode
+app/fontend/dist

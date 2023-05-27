@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  app:
+    build: .
+    image: casaos-cloudflared
+    container_name: cloudflared
+    network_mode: host
+    volumes:
+    - ./app:/var/app
+    - config:/config
+    tty: true
+
+
+
+volumes:
+  config:
+    
