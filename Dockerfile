@@ -3,6 +3,7 @@ FROM debian:stable-slim
 ARG TARGETPLATFORM
 ARG TARGETOS
 ARG TARGETARCH
+ARG TARGETVARIANT
 ARG CACHEBUST=1
 
 WORKDIR /var/app
@@ -18,7 +19,13 @@ RUN npm cache clean -f
 RUN npm install -g n
 RUN n 18
 
-RUN curl -L --output cloudflared.deb "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-$TARGETOS-$TARGETARCH.deb" && dpkg -i cloudflared.deb
+
+RUN if [ "$TARGETVARIANT" = "v7" ] ; then \
+    curl -L --output cloudflared.deb "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-$TARGETOS-${TARGETARCH}hf.deb" && dpkg -i cloudflared.deb; \
+  else \
+    curl -L --output cloudflared.deb "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-$TARGETOS-$TARGETARCH.deb" && dpkg -i cloudflared.deb; \
+  fi
+
 
 VOLUME /config
 
