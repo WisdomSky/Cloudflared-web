@@ -1,5 +1,8 @@
 FROM debian:stable-slim
 
+ARG TARGETPLATFORM
+ARG TARGETOS
+ARG TARGETARCH
 ARG CACHEBUST=1
 
 WORKDIR /var/app
@@ -15,7 +18,7 @@ RUN npm cache clean -f
 RUN npm install -g n
 RUN n 18
 
-RUN curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb && dpkg -i cloudflared.deb
+RUN curl -L --output cloudflared.deb "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-$TARGETOS-$TARGETARCH.deb" && dpkg -i cloudflared.deb
 
 VOLUME /config
 
