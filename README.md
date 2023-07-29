@@ -69,6 +69,7 @@ The Web UI where you can setup the cloudflared token can be accessed from port `
 
 ## Building casaos-cloudflared
 
+    docker buildx create --use
     chmod +x ./build.sh
     ./build.sh
 
