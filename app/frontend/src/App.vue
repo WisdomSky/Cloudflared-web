@@ -6,15 +6,18 @@
     <form id="cf-form" method="post" @submit.prevent>
       <div>
         <div>
-          <h4>Enter Cloudflared Token</h4>
+          <h4>Enter Cloudflared Tunnel Token</h4>
         </div>
         <input type="text" name="token" v-model="token">
       </div>
       <div>
       <button v-if="changed || token.trim().length == 0" @click.prevent="save" style="margin-right:20px">Save</button>
-      <button v-if="token.trim().length" @click.prevent="start">{{ config.start ? 'Remove Service' : 'Install Tunnel Service' }}</button>
+      <button v-if="token.trim().length && !empty" @click.prevent="start">{{ config.start ? 'Stop' : 'Start' }}</button>
     </div>
     </form>
+    <div class="credits">
+        Developed by <a href="https://github.com/WisdomSky">WisdomSky</a>
+    </div>
   </div>
 </template>
 
@@ -29,6 +32,8 @@
   const token = ref<string>('');
 
   const changed = ref<boolean>(false);
+
+  const empty = ref<boolean>(true);
 
   onBeforeMount(async() => await init());
 
@@ -57,21 +62,23 @@
 
   async function save() {
 
-const res = await fetch(endpoint +'/token', {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                token: token.value
+    const res = await fetch(endpoint +'/token', {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  token: token.value
+                })
               })
-            })
 
-  if (res.status === 200) {
-    changed.value = false;
+    if (res.status === 200) {
+      changed.value = false;
+    }
+
+    empty.value = token.value.trim().length === 0;
+
   }
-
-}
 
   async function init() {
     const res = await fetch(endpoint +'/config');
@@ -79,10 +86,20 @@ const res = await fetch(endpoint +'/token', {
     const json = await res.json();
 
     config.token = json.token;
+
+    empty.value = config.token === undefined || config.token.trim().length === 0;
     token.value = config.token;
     config.start = json.start;
 
-    watch(token, () => changed.value = true);
+    watch(token, () => {
+      
+      let extractToken = token.value.split(' ');
+      if (extractToken[extractToken.length-1] !== token.value) {
+        token.value = extractToken[extractToken.length-1];
+      }
+
+      changed.value = true
+    });
   }
 
 
@@ -112,6 +129,7 @@ const res = await fetch(endpoint +'/token', {
     border: 2px solid #f1c577;
     padding: 10px 50px;
     font-size: 1.25em;
+    color: #fff;
 
     &:hover {
       opacity: 0.75;
@@ -123,6 +141,11 @@ const res = await fetch(endpoint +'/token', {
       
     }
 
+  }
+
+  .credits {
+    margin-top: 20px;
+    text-align: center;
   }
 
 </style>

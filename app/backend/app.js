@@ -38,16 +38,8 @@ app.post('/start', (req, res) => {
       config.start = start;
       saveConfig(config);
     }
-    if (config.start) {
-      spawn("cloudflared", ["service", "install", config.token], {
-        stdio: 'ignore',
-        detached: true
-      }).unref();
-      res.status(200).send('Started');
-    } else {
-      spawn("cloudflared", ["service", "uninstall"]);
-      res.status(200).send('Stopped');
-    }
+    
+    init(config, res);
     
   } catch(e) {}
   res.status(500).send();
@@ -67,13 +59,19 @@ app.post('/token', (req, res) => {
   config.token = token;
 
   saveConfig(config);
+  console.log(`Token updated: ${token}`);
 
   res.status(200).send(`OK!`);
 })
 
 
 app.listen(port, () => {
-  console.log(`Listening on port ${port}`)
+
+  let config = getConfig();
+
+  init(config);
+
+  console.log(`WebUI running on port ${port}`)
 })
 
 
@@ -86,8 +84,33 @@ function getConfig() {
     const json = JSON.parse(fs.readFileSync(configpath));
     config = json;
   } catch(e) {
+    console.log('No pre-existing config file found.');
   }
   return config;
+}
+
+function init(config, res) {
+  try {
+    if (config.start) {
+      spawn("cloudflared", ["service", "install", config.token], {
+        stdio: 'ignore',
+        detached: true
+      }).unref();
+      if (res !== undefined) {
+        res.status(200).send('Started');
+      }
+      console.log(`Cloudflare tunnel started. `);
+      console.log(`Using token: ${config.token}`);
+    } else {
+      spawn("cloudflared", ["service", "uninstall"]);
+      if (res !== undefined) {
+        res.status(200).send('Stopped');
+      }
+      console.log("Cloudflare tunnel stopped");
+    }
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 

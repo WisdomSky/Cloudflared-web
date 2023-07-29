@@ -7,12 +7,5 @@ services:
     container_name: cloudflared
     network_mode: host
     volumes:
-    - ./app:/var/app
-    - config:/config
+    - ./config:/config
     tty: true
-
-
-
-volumes:
-  config:
-    
