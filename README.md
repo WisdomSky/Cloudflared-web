@@ -1,3 +1,5 @@
-https://www.docker.com/blog/multi-arch-images/
+# Build casaos-cloudflared
 
-    sudo docker buildx build --platform linux/amd64,linux/arm64,linux/armhf -t wisdomsky/casaos-cloudflared:latest -t wisdomsky/casaos-cloudflared:1.0 --push .
+    chmod +x ./build.sh
+    ./build.sh
+
