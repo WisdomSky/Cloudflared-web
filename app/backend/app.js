@@ -59,19 +59,22 @@ app.post('/token', (req, res) => {
   config.token = token;
 
   saveConfig(config);
+  try {
+    res.status(200).send(`OK!`);
+  } catch(e) {}
   console.log(`Token updated: ${token}`);
-
-  res.status(200).send(`OK!`);
 })
 
 
 app.listen(port, () => {
-
-  let config = getConfig();
-
-  init(config);
-
-  console.log(`WebUI running on port ${port}`)
+  console.log(`WebUI running on port ${port}`);
+  setTimeout(() => {
+    let config = getConfig();
+    if (config.start) {
+      console.log('Restarting cloudflare tunnel.');
+    }
+    init(config);
+  }, 2000);
 })
 
 

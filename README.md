@@ -12,10 +12,21 @@ When manually setting up this image, it is crucial to always set the `networking
 
 or if through `docker-compose.yml`:
 
+via docker.io:
 ```yaml
 services:
   app:
     image: wisdomsky/casaos-cloudflared:latest
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /path/to/config:/config #optional
+```
+via ghcr.io:
+```yaml
+services:
+  app:
+    image: ghcr.io/wisdomsky/casaos-cloudflared:latest
     restart: unless-stopped
     network_mode: host
     volumes:
