@@ -68,13 +68,14 @@ app.post('/token', (req, res) => {
 
 app.listen(port, () => {
   console.log(`WebUI running on port ${port}`);
-  setTimeout(() => {
-    let config = getConfig();
-    if (config.start) {
-      console.log('Restarting cloudflare tunnel.');
-    }
-    init(config);
-  }, 2000);
+  let config = getConfig();
+  if (config.start) {
+    console.log('Restarting cloudflare tunnel.');
+    init({start: false});
+    setTimeout(() => {
+      init(config);
+    }, 2000);
+  }
 })
 
 
