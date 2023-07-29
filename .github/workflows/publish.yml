@@ -13,6 +13,9 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build the cloudflared Docker image
       run: |
-            docker build . --tag ghcr.io/wisdomsky/casaos-cloudflared:latest
-            docker run ghcr.io/wisdomsky/casaos-cloudflared:latest
-            docker push ghcr.io/wisdomsky/casaos-cloudflared:latest
+            docker buildx create --use
+            docker buildx build --platform linux/amd64,linux/arm64,linux/armhf -t wisdomsky/casaos-cloudflared:latest -t wisdomsky/casaos-cloudflared:2023.7.3 --push .
+      #run: |
+      #      docker build . --tag ghcr.io/wisdomsky/casaos-cloudflared:latest
+      #      docker run ghcr.io/wisdomsky/casaos-cloudflared:latest
+      #      docker push ghcr.io/wisdomsky/casaos-cloudflared:latest
