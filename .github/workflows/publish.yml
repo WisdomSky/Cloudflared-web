@@ -14,7 +14,7 @@ jobs:
     - name: Build the cloudflared Docker image
       run: |
             docker buildx create --use
-            docker buildx build --platform linux/amd64,linux/arm64,linux/armhf -t wisdomsky/casaos-cloudflared:latest -t wisdomsky/casaos-cloudflared:2023.7.3 --push .
+            docker buildx build --platform linux/amd64,linux/arm64,linux/armhf -t ghcr.io/wisdomsky/casaos-cloudflared:latest -t ghcr.io/wisdomsky/casaos-cloudflared:2023.7.3 --push .
       #run: |
       #      docker build . --tag ghcr.io/wisdomsky/casaos-cloudflared:latest
       #      docker run ghcr.io/wisdomsky/casaos-cloudflared:latest
