@@ -8,12 +8,27 @@
         <div>
           <h4>Enter Cloudflared Tunnel Token</h4>
         </div>
-        <input type="text" name="token" v-model="token">
+        <div>⚠ CasaOS Cloudflared 1.0 is replaced by a newer version which fixed some serious issues. Please use a newer version of CasaOS Cloudflared.</div>
+        <div style="margin-top:10px">
+            <h3>Instructions for CasaOS Users:</h3>
+            <p>
+              Install <a href="https://github.com/WisdomSky/CasaOS-Coolstore" target="_blank">CasaOS Coolstore</a> Appstore and use the version of CasaOS Cloudflared included in it.
+            </p>
+            <ol>
+              <li>Open CasaOS dashboard then click the Appstore.</li>
+              <li>On the right side, above the apps list, you can find an <strong>Add Source</strong> button. Click it and paste the following link: <code>https://casaos-appstore.paodayag.dev/coolstore.zip</code></li>
+              <li>Click <strong>Add</strong> and wait until the apps inside the Coolstore Appstore is downloaded into your CasaOS.</li>
+              <li>After finished installing the appstore, find the <strong>Cloudflared</strong> app from Coolstore in your appstore list.</li>
+              <li>Then install.</li>
+            </ol>
+        </div>
+        <div style="margin-top:10px">
+          <h3>Instructions for for Non-CasaOS Users:</h3>
+          <ul>
+            <li>Head over to the CasaOS Cloudflared docker page and follow the instructions: <a href="https://hub.docker.com/r/wisdomsky/casaos-cloudflared">https://hub.docker.com/r/wisdomsky/casaos-cloudflared</a></li>
+          </ul>
+        </div>
       </div>
-      <div>
-      <button v-if="changed || token.trim().length == 0" @click.prevent="save" style="margin-right:20px">Save</button>
-      <button v-if="token.trim().length && !empty" @click.prevent="start">{{ config.start ? 'Stop' : 'Start' }}</button>
-    </div>
     </form>
     <div class="credits">
         Developed by <a href="https://github.com/WisdomSky">WisdomSky</a>
@@ -23,84 +38,7 @@
 
 
 <script setup lang="ts">
-  import { ref, reactive, onBeforeMount, watch } from 'vue' 
 
-  const endpoint = "";
-
-  const config = reactive<{token: string,start:boolean}>({token: '', start: false});
-
-  const token = ref<string>('');
-
-  const changed = ref<boolean>(false);
-
-  const empty = ref<boolean>(true);
-
-  onBeforeMount(async() => await init());
-
-
-  async function start() {
-
-    config.start = !config.start;
-    const res = await fetch(endpoint +'/start', {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    start: config.start
-                  })
-                })
-
-
-    if (res.status === 200) {
-      
-    } else {
-      alert('Failed to Start!');
-    }
-
-  }
-
-  async function save() {
-
-    const res = await fetch(endpoint +'/token', {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  token: token.value
-                })
-              })
-
-    if (res.status === 200) {
-      changed.value = false;
-    }
-
-    empty.value = token.value.trim().length === 0;
-
-  }
-
-  async function init() {
-    const res = await fetch(endpoint +'/config');
-
-    const json = await res.json();
-
-    config.token = json.token;
-
-    empty.value = config.token === undefined || config.token.trim().length === 0;
-    token.value = config.token;
-    config.start = json.start;
-
-    watch(token, () => {
-      
-      let extractToken = token.value.split(' ');
-      if (extractToken[extractToken.length-1] !== token.value) {
-        token.value = extractToken[extractToken.length-1];
-      }
-
-      changed.value = true
-    });
-  }
 
 
 </script>
