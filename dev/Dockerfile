@@ -14,12 +14,6 @@ WORKDIR /var/app
 
 RUN apt update && apt upgrade && apt install curl -y
 
-#RUN apt install -f nodejs npm -y
-#RUN npm cache clean -f
-#RUN npm install -g n
-#RUN n 18
-
-
 RUN if [ "$TARGETVARIANT" = "v7" ]; then \
         CLOUDFLARED_PKG="cloudflared-$TARGETOS-${TARGETARCH}hf.deb"; \
     else \
@@ -28,7 +22,6 @@ RUN if [ "$TARGETVARIANT" = "v7" ]; then \
     curl -L --output cloudflared.deb "$CLOUDFLARED_BASE_URL/$CLOUDFLARED_VERSION/$CLOUDFLARED_PKG" && \
     dpkg -i cloudflared.deb && \
     rm cloudflared.deb
-
 
 VOLUME /config
 
