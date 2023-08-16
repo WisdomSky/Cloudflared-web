@@ -39,10 +39,10 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/armhf
           push: true
           tags: |
-            #wisdomsky/casaos-cloudflared:latest
-            #wisdomsky/casaos-cloudflared:2023.7.3
-            #ghcr.io/wisdomsky/casaos-cloudflared:latest
-            #ghcr.io/wisdomsky/casaos-cloudflared:2023.7.3
+#wisdomsky/casaos-cloudflared:latest
+#wisdomsky/casaos-cloudflared:2023.7.3
+#ghcr.io/wisdomsky/casaos-cloudflared:latest
+#ghcr.io/wisdomsky/casaos-cloudflared:2023.7.3
             wisdomsky/cloudflared-web:latest
             wisdomsky/cloudflared-web:2023.7.3
             ghcr.io/wisdomsky/cloudflared-web:latest
