@@ -7,7 +7,7 @@ ARG TARGETVARIANT
 ARG CLOUDFLARED_VERSION=2023.7.3
 ARG CLOUDFLARED_BASE_URL="https://github.com/cloudflare/cloudflared/releases/download"
 
-ENV WEBUI_PORT=14333
+ENV WEBUI_PORT=${WEBUI_PORT:-14333}
 
 USER root
 WORKDIR /var/app
