@@ -2,7 +2,7 @@ version: '2'
 
 services:
   app:
-    build: ./dev
+    build: .
     image: cloudflared-web
     container_name: cloudflared-web
     network_mode: host
@@ -10,7 +10,7 @@ services:
       WEBUI_PORT: 1111
     volumes:
       - ./config:/config
-      - ./app/backend:/var/app/backend
-      - ./app/frontend:/var/app/frontend
+      - ../app/backend:/var/app/backend
+      - ../app/frontend:/var/app/frontend
     tty: true
     stdin_open: true
