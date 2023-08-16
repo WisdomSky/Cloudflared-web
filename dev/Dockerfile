@@ -32,10 +32,6 @@ RUN if [ "$TARGETVARIANT" = "v7" ]; then \
 
 VOLUME /config
 
-COPY app/backend /var/app/backend
-COPY app/frontend /var/app/frontend
+VOLUME /var/app/backend
+VOLUME /var/app/frontend
 
-RUN cd /var/app/frontend && npm install && npm run build
-RUN cd /var/app/backend && npm install
-
-ENTRYPOINT node /var/app/backend/app.js

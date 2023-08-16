@@ -1,11 +1,12 @@
 const express = require('express')
 const app = express()
-const port = 14333
+const port = process.env.WEBUI_PORT;
 const path = require('path');
 const bodyParser = require('body-parser')
 const cors = require('cors');
 const fs = require('fs');
-const { spawn } = require("child_process");
+const { CloudflaredTunnel } = require('node-cloudflared-tunnel');
+const tunnel = new CloudflaredTunnel();
 
 const configpath = "/config/config.json";
 
@@ -23,7 +24,6 @@ app.get('/', (req, res) => {
 
 app.get('/config', (req, res) => {
   let config = getConfig();
-
   res.status(200).set('Content-Type', 'application/json').send(JSON.stringify(config));
 })
 
@@ -94,19 +94,17 @@ function getConfig() {
 }
 
 function init(config, res) {
+  tunnel.token = config.token;
   try {
     if (config.start) {
-      spawn("cloudflared", ["service", "install", config.token], {
-        stdio: 'ignore',
-        detached: true
-      }).unref();
+      tunnel.start();
       if (res !== undefined) {
         res.status(200).send('Started');
       }
       console.log(`Cloudflare tunnel started. `);
       console.log(`Using token: ${config.token}`);
     } else {
-      spawn("cloudflared", ["service", "uninstall"]);
+      tunnel.stop();
       if (res !== undefined) {
         res.status(200).send('Stopped');
       }

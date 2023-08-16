@@ -2,10 +2,15 @@ version: '2'
 
 services:
   app:
-    build: .
-    image: casaos-cloudflared
-    container_name: cloudflared
+    build: ./dev
+    image: cloudflared-web
+    container_name: cloudflared-web
     network_mode: host
+    environment:
+      WEBUI_PORT: 1111
     volumes:
-    - ./config:/config
+      - ./config:/config
+      - ./app/backend:/var/app/backend
+      - ./app/frontend:/var/app/frontend
     tty: true
+    stdin_open: true

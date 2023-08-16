@@ -17,6 +17,8 @@ services:
     image: wisdomsky/cloudflared-web:latest
     restart: unless-stopped
     network_mode: host
+    environment:
+      WEBUI_PORT: 14333 # optional (default is 14333)
     volumes:
       - /path/to/config:/config #optional
 ```
@@ -27,6 +29,8 @@ services:
     image: ghcr.io/wisdomsky/cloudflared-web:latest
     restart: unless-stopped
     network_mode: host
+    environment:
+      WEBUI_PORT: 14333 # optional (default is 14333)
     volumes:
       - /path/to/config:/config #optional
 ```
