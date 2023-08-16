@@ -8,12 +8,17 @@
         <div>
           <h4>Enter Cloudflared Tunnel Token</h4>
         </div>
-        <input type="text" name="token" v-model="token">
+        <input type="text" name="token" v-model="token" placeholder="cloudflared service install eyJhIjoiO34sdfsdf43wrwsefs43csefw3">
       </div>
       <div>
-      <button v-if="changed || token.trim().length == 0" @click.prevent="save" style="margin-right:20px">Save</button>
-      <button v-if="token.trim().length && !empty" @click.prevent="start">{{ config.start ? 'Stop' : 'Start' }}</button>
-    </div>
+        <button v-if="changed || token.trim().length == 0" @click.prevent="save" style="margin-right:20px">Save</button>
+        <button v-if="token.trim().length && !empty" @click.prevent="start">{{ config.start ? 'Stop' : 'Start' }}</button>
+        <br>
+        <small>💡 Tip: You can input the whole command (<code>cloudflared service install eyJhIjoiO...</code>). We will automatically extract the token from it.</small>
+      </div>
+      <div style="margin-top: 10px; text-align: center">
+        ⭐ How to setup cloudflare tunnel?&nbsp;<a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/install-and-setup/tunnel-guide/remote/#1-create-a-tunnel" target="_blank">Click here</a>
+      </div>
     </form>
     <div class="credits">
         Developed by <a href="https://github.com/WisdomSky">WisdomSky</a>

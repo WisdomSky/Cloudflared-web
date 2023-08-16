@@ -1,14 +1,12 @@
-# CasaOS Cloudflared
+# Cloudflared-web
 
-_A tunneling daemon by Cloudflare that safely exposes your localhost into the web. A docker image adapted specially for [CasaOS](https://github.com/IceWhaleTech/CasaOS)._*
-
-\* Will also work even if you use it without CasaOS.
+_Cloudflared-web packages both cloudflare tunnel and a simple web-based user interface for easy starting and stopping of cloudflare tunnel._
 
 --- 
 ## Application Setup
 When manually setting up this image, it is crucial to always set the `networking mode` into `host` as without it, the cloudflared service won't be able to access the services running on the host:
 
-    docker run --network host wisdomsky/casaos-cloudflared:latest 
+    docker run --network host wisdomsky/cloudflared-web:latest 
 
 or if through `docker-compose.yml`:
 
@@ -16,7 +14,7 @@ via docker.io:
 ```yaml
 services:
   app:
-    image: wisdomsky/casaos-cloudflared:latest
+    image: wisdomsky/cloudflared-web:latest
     restart: unless-stopped
     network_mode: host
     volumes:
@@ -26,7 +24,7 @@ via ghcr.io:
 ```yaml
 services:
   app:
-    image: ghcr.io/wisdomsky/casaos-cloudflared:latest
+    image: ghcr.io/wisdomsky/cloudflared-web:latest
     restart: unless-stopped
     network_mode: host
     volumes:
@@ -52,14 +50,14 @@ The Web UI where you can setup the cloudflared token can be accessed from port `
 
 #### How to temporarily stop the cloudflare tunnel.
 
-1. Go to the cloudflared app WebUi via http://localhost:14333.
+1. Go to the cloudflared app WebUI via http://localhost:14333.
 2. Click "Remove Service".
 3. Stop the container.
 
 ### How to restart the cloudflare tunnel.
 
 1. Start the container.
-2. Go to the cloudflared app WebUi via http://localhost:14333.
+2. Go to the cloudflared app WebUI via http://localhost:14333.
 3. Click "Install Service".
 
 ---
@@ -73,13 +71,3 @@ The Web UI where you can setup the cloudflared token can be accessed from port `
 #### Cloudflare tunnel does not work after stopping and then restarting the container
 
 * Re-install cloudflare service through the WebUI (http://localhost:14333), click Remove Service and then click Install Service.
-
-#### The previously saved Cloudflare token still exists after removing and reinstalling the CasaOS-Cloudflared app
-
-* Locate and delete the previously saved config.json file. Default location in host machine is `/DATA/AppData/casaos-cloudflared/config` or within the container, it is `/config`.
-
-## Building casaos-cloudflared
-
-    docker buildx create --use
-    docker buildx build --platform linux/amd64,linux/arm64,linux/armhf -t wisdomsky/casaos-cloudflared:latest --push .
-
