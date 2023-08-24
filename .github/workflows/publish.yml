@@ -36,7 +36,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          platforms: linux/amd64,linux/arm64,linux/armhf
+          platforms: linux/amd64,linux/arm64,linux/armhf, linux/arm, linux/386
           push: true
           tags: |
             wisdomsky/cloudflared-web:latest
