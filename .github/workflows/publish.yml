@@ -37,6 +37,7 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64,linux/armhf, linux/arm
+          provenance: false
           push: true
           tags: |
             wisdomsky/cloudflared-web:latest
