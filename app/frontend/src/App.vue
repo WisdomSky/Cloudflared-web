@@ -130,12 +130,6 @@
 
     version.value = await (await fetch(endpoint + '/version')).text();
 
-    const info = await (await fetch(endpoint + '/new-version')).json();
-
-    updateInfo.current_version = info.current_version;
-    updateInfo.latest_version = info.latest_version;
-    updateInfo.update = info.update;
-
     const json = await (await fetch(endpoint + '/config')).json();
     config.token = json.token;
     empty.value = config.token === undefined || config.token.trim().length === 0;
@@ -152,6 +146,13 @@
 
       changed.value = true
     });
+
+    const info = await (await fetch(endpoint + '/new-version')).json();
+
+    updateInfo.current_version = info.current_version;
+    updateInfo.latest_version = info.latest_version;
+    updateInfo.update = info.update;
+
   }
 
 
