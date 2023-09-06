@@ -93,12 +93,10 @@ services:
 
 
 ## Screenshots
-<!---
-![Screenshot 1](https://raw.githubusercontent.com/WisdomSky/Casaos-Appstore/main/Apps/Cloudflared/screenshot-1.png)
---->
-![Screenshot 2](https://raw.githubusercontent.com/WisdomSky/Casaos-Appstore/main/Apps/Cloudflared/screenshot-2.png)
 
-![Screenshot 3](https://raw.githubusercontent.com/WisdomSky/Casaos-Appstore/main/Apps/Cloudflared/screenshot-3.png)
+![Screenshot 1](https://raw.githubusercontent.com/WisdomSky/Cloudflared-web/main/screenshot-1.png)
+
+![Screenshot 2](https://raw.githubusercontent.com/WisdomSky/Cloudflared-web/main/screenshot-2.png)
 
 ---
 
