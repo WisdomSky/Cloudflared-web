@@ -1,47 +1,97 @@
 # Cloudflared-web
 
-_Cloudflared-web packages both cloudflare tunnel and a simple web-based user interface for easy starting and stopping of cloudflare tunnel._
+_Cloudflared-web is a docker image that packages both cloudflared cli and a no-frills Web UI for easy starting/stopping of cloudflare tunnel._
 
 https://hub.docker.com/r/wisdomsky/cloudflared-web
+
+---
+
+## Why use `Cloudflared-web`?
+
+#### Pros
+
+✅ Only need to run a docker command once. No need to run docker commands everytime you want to start or stop the container or when updating the token.
+
+✅ Start and stop cloudflare tunnel anytime with a single click.
+
+#### Cons
+
+❌ Only supports Cloudflare Tunnel.
+
+❌ Can only update hostname policies through the [ZeroTrust](https://one.dash.cloudflare.com/) dashboard.
+
 
 --- 
 ## Application Setup
 When manually setting up this image, it is crucial to always set the `networking mode` into `host` as without it, the cloudflared service won't be able to access the services running on the host:
 
-    docker run --network host wisdomsky/cloudflared-web:latest 
+    docker run --network host wisdomsky/cloudflared-web:latest
 
-or if through `docker-compose.yml`:
+or if using `docker-compose.yml`:
 
-via docker.io:
 ```yaml
 services:
-  app:
+  cloudflared:
+    image: wisdomsky/cloudflared-web:latest
+    restart: unless-stopped
+    network_mode: host
+```
+
+The Web UI where you can setup the Cloudflared token can be accessed from port `14333`:
+
+    http://localhost:14333
+
+### Github Containers
+
+If for some reason you are unable to pull images from Docker's Official Image Registry (docker.io), `Cloudflared-web` is also synced to Github Container Registry (ghcr.io).
+
+Just prefix the image with `ghcr.io/` in order to use the mirrored image in Github.
+```yaml
+services:
+  cloudflared:
+    image: ghcr.io/wisdomsky/cloudflared-web:latest
+    restart: unless-stopped
+    network_mode: host
+```
+
+
+---
+## Additional Parameters
+
+### Environment
+| Variable Name | Default value | Required or Optional | Description |
+|---|---|---|---|
+| WEBUI_PORT | 14333 | _Optional_ | The port on the host where the WebUI will be running. Useful when an existing process is running on port `14333` and want to assign cloudflared-web into a different available port. |
+
+example `docker-compose.yaml`:
+```yaml
+services:
+  cloudflared:
     image: wisdomsky/cloudflared-web:latest
     restart: unless-stopped
     network_mode: host
     environment:
-      WEBUI_PORT: 14333 # optional (default is 14333)
-    volumes:
-      - /path/to/config:/config #optional
+      WEBUI_PORT: 1111
 ```
-via ghcr.io:
+
+
+### Volume
+| Container Path | Required or Optional | Description |
+|---|---|---|
+| /config | _Optional_ | The path to the directory where the `config.json` file containing the Cloudflare token and start status will be saved.  |
+
+example `docker-compose.yaml`:
 ```yaml
 services:
-  app:
-    image: ghcr.io/wisdomsky/cloudflared-web:latest
+  cloudflared:
+    image: wisdomsky/cloudflared-web:latest
     restart: unless-stopped
     network_mode: host
-    environment:
-      WEBUI_PORT: 14333 # optional (default is 14333)
     volumes:
-      - /path/to/config:/config #optional
+      - /mnt/storage/cloudflared/config:/config
 ```
 
-The Web UI where you can setup the cloudflared token can be accessed from port `14333`:
 
-    http://localhost:14333
-
----
 ## Screenshots
 <!---
 ![Screenshot 1](https://raw.githubusercontent.com/WisdomSky/Casaos-Appstore/main/Apps/Cloudflared/screenshot-1.png)
@@ -52,28 +102,7 @@ The Web UI where you can setup the cloudflared token can be accessed from port `
 
 ---
 
-## Frequently Asked Questions
+## Issues
 
-#### How to temporarily stop the cloudflare tunnel.
-
-1. Go to the cloudflared app WebUI via http://localhost:14333.
-2. Click "Remove Service".
-3. Stop the container.
-
-### How to restart the cloudflare tunnel.
-
-1. Start the container.
-2. Go to the cloudflared app WebUI via http://localhost:14333.
-3. Click "Install Service".
-
----
-
-## Troubleshooting
-
-#### Cloudflare tunnel does not work after restarting Docker
-
-* Re-install cloudflare service through the WebUI (http://localhost:14333), click Remove Service and then click Install Service.
-
-#### Cloudflare tunnel does not work after stopping and then restarting the container
-
-* Re-install cloudflare service through the WebUI (http://localhost:14333), click Remove Service and then click Install Service.
+For any problems experienced while using the docker image, please submit a new issue to:
+https://github.com/WisdomSky/Cloudflared-web/issues
