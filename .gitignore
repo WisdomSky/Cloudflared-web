@@ -4,3 +4,5 @@ app/backend/node_modules
 app/backend/package-lock.json
 app/frontend/.vscode
 app/frontend/dist
+.idea
+dev/config

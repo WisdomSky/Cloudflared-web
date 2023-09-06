@@ -2,6 +2,8 @@
 
 _Cloudflared-web packages both cloudflare tunnel and a simple web-based user interface for easy starting and stopping of cloudflare tunnel._
 
+https://hub.docker.com/r/wisdomsky/cloudflared-web
+
 --- 
 ## Application Setup
 When manually setting up this image, it is crucial to always set the `networking mode` into `host` as without it, the cloudflared service won't be able to access the services running on the host:

@@ -1,27 +1,48 @@
 <template>
   <div>
     <div>
-      <img src="./assets/cloudflare.png" class="cf-logo" alt="Cloudflare">
+      <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/cloudflare.svg" class="cf-logo" alt="Cloudflare">
     </div>
     <form id="cf-form" method="post" @submit.prevent>
       <div>
         <div>
-          <h4>Enter Cloudflared Tunnel Token</h4>
+          <h4>Enter Cloudflare Tunnel Connector Token</h4>
         </div>
         <input type="text" name="token" v-model="token" placeholder="cloudflared service install eyJhIjoiO34sdfsdf43wrwsefs43csefw3">
       </div>
       <div>
         <button v-if="changed || token.trim().length == 0" @click.prevent="save" style="margin-right:20px">Save</button>
         <button v-if="token.trim().length && !empty" @click.prevent="start">{{ config.start ? 'Stop' : 'Start' }}</button>
-        <br>
-        <small>💡 Tip: You can input the whole command (<code>cloudflared service install eyJhIjoiO...</code>). We will automatically extract the token from it.</small>
       </div>
-      <div style="margin-top: 10px; text-align: center">
-        ⭐ How to setup cloudflare tunnel?&nbsp;<a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/install-and-setup/tunnel-guide/remote/#1-create-a-tunnel" target="_blank">Click here</a>
+      <div class="new-version" v-if="updateInfo.update">
+        💡 [{{ updateInfo.latest_version }}] A new update is available. Update the docker image in order to update the version.
+      </div>
+      <div style="margin-top: 20px; text-align: center">
+        How to create a Cloudflare Tunnel?&nbsp;<a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/install-and-setup/tunnel-guide/remote/#1-create-a-tunnel" target="_blank">Read here</a>
       </div>
     </form>
     <div class="credits">
-        Developed by <a href="https://github.com/WisdomSky">WisdomSky</a>
+        <a href="https://github.com/WisdomSky/Cloudflared-web" title="github.com/WisdomSky/Cloudflared-web">
+          <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/github.svg" style="height: 20px;">
+        </a>
+    </div>
+    <div class="version" v-if="version.trim().length">
+      <small>
+        <code>{{ version }}</code>
+      </small>
+    </div>
+    <div class="tip" v-if="!hideTip">
+      <h5>💡 Quick Tip</h5>
+      <hr>
+      <small>You can input the whole command like:<br>
+        <code>cloudflared service install eyJhIjoiO...</code><br>
+        and we will take care of extracting the token from it.</small>
+      <div>
+        <button @click="doHideTip">Hide</button>&nbsp;
+        <label>
+          <input type="checkbox" v-model="tipDontShowAgain"> Do not show again
+        </label>
+      </div>
     </div>
   </div>
 </template>
@@ -36,6 +57,26 @@
 
   const token = ref<string>('');
 
+  const tipDontShowAgain = ref<boolean>(localStorage.getItem('tip_dont_show_again') === "true" || false);
+
+  watch(tipDontShowAgain, () => {
+    localStorage.setItem('tip_dont_show_again', tipDontShowAgain.value ? 'true' : 'false');
+  });
+
+  const hideTip = ref<boolean>(tipDontShowAgain.value);
+
+  const version = ref<string>('');
+
+  const updateInfo = reactive<{
+                        current_version: string,
+                        latest_version: string,
+                        update: boolean
+                      }>({
+                        current_version: '',
+                        latest_version: '',
+                        update: false
+                      });
+
   const changed = ref<boolean>(false);
 
   const empty = ref<boolean>(true);
@@ -46,7 +87,7 @@
   async function start() {
 
     config.start = !config.start;
-    const res = await fetch(endpoint +'/start', {
+    const res = await fetch(endpoint + '/start', {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -67,7 +108,7 @@
 
   async function save() {
 
-    const res = await fetch(endpoint +'/token', {
+    const res = await fetch(endpoint + '/token', {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -86,14 +127,20 @@
   }
 
   async function init() {
-    const res = await fetch(endpoint +'/config');
 
-    const json = await res.json();
+    version.value = await (await fetch(endpoint + '/version')).text();
 
+    const info = await (await fetch(endpoint + '/new-version')).json();
+
+    updateInfo.current_version = info.current_version;
+    updateInfo.latest_version = info.latest_version;
+    updateInfo.update = info.update;
+
+    const json = await (await fetch(endpoint + '/config')).json();
     config.token = json.token;
-
     empty.value = config.token === undefined || config.token.trim().length === 0;
     token.value = config.token;
+
     config.start = json.start;
 
     watch(token, () => {
@@ -105,6 +152,11 @@
 
       changed.value = true
     });
+  }
+
+
+  function doHideTip() {
+    hideTip.value = true;
   }
 
 
@@ -148,9 +200,57 @@
 
   }
 
+  .new-version {
+    max-width: 500px;
+    margin-top: 10px;
+    background: rgba(255,255,0,0.1);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
   .credits {
     margin-top: 20px;
     text-align: center;
+  }
+
+  .tip {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    max-width: 500px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: left;
+    box-shadow: 0 5px 10px 5px rgba(0,0,0,0.2);
+
+    h5 {
+      margin: 0;
+      color: #FF8B00;
+    }
+
+    button {
+      padding: 5px 10px;
+      font-size: 0.65em;
+    }
+
+    label {
+      vertical-align: center;
+      font-size: 0.65em;
+      input {
+        vertical-align: middle;
+      }
+    }
+
+  }
+
+  .version {
+    position: absolute;
+    top: 0;
+    right: 10px;
   }
 
 </style>

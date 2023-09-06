@@ -5,6 +5,9 @@ const path = require('path');
 const bodyParser = require('body-parser')
 const cors = require('cors');
 const fs = require('fs');
+
+const { execSync } = require("node:child_process");
+
 const { CloudflaredTunnel } = require('node-cloudflared-tunnel');
 const tunnel = new CloudflaredTunnel();
 
@@ -25,6 +28,29 @@ app.get('/', (req, res) => {
 app.get('/config', (req, res) => {
   let config = getConfig();
   res.status(200).set('Content-Type', 'application/json').send(JSON.stringify(config));
+})
+
+app.get('/version', (req, res) => {
+  let version = execSync('cloudflared -v');
+  res.status(200).set('Content-Type', 'text/plain').send(version);
+})
+
+app.get('/new-version', async (req, res) => {
+  const current_version = process.env.VERSION;
+
+  const resp = await fetch('https://registry.hub.docker.com/v2/repositories/wisdomsky/cloudflared-web/tags/?page_size=100&page=1');
+
+  const image_info = await resp.json();
+
+  const tags = image_info.results.filter(tag => tag.name !== 'latest')
+
+  const latest_version = tags[0].name;
+
+  res.status(200).set('Content-Type', 'application/json').send({
+    current_version,
+    latest_version,
+    update: current_version !== latest_version
+  });
 })
 
 app.post('/start', (req, res) => {
