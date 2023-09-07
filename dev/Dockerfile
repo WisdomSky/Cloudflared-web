@@ -10,6 +10,8 @@ ARG CLOUDFLARED_BASE_URL="https://github.com/cloudflare/cloudflared/releases/dow
 ENV VERSION=$CLOUDFLARED_VERSION
 ENV WEBUI_PORT=${WEBUI_PORT:-14333}
 
+EXPOSE ${WEBUI_PORT}
+
 USER root
 WORKDIR /var/app
 
