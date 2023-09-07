@@ -5,12 +5,9 @@ services:
     build: .
     image: cloudflared-web
     container_name: cloudflared-web
+    network_mode: host
     environment:
       WEBUI_PORT: 1111
-    ports:
-      - target: 1111
-        published: 1111
-        protocol: tcp
     volumes:
       - ./config:/config
       - ../app/backend:/var/app/backend
