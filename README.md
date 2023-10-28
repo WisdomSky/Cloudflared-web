@@ -104,3 +104,7 @@ services:
 
 For any problems experienced while using the docker image, please submit a new issue to:
 https://github.com/WisdomSky/Cloudflared-web/issues
+
+---
+
+Last build on 10-28-2023
