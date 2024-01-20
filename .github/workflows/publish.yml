@@ -41,6 +41,6 @@ jobs:
           push: true
           tags: |
             wisdomsky/cloudflared-web:latest
-            wisdomsky/cloudflared-web:2024.1.2
+            wisdomsky/cloudflared-web:2024.1.4
             ghcr.io/wisdomsky/cloudflared-web:latest
-            ghcr.io/wisdomsky/cloudflared-web:2024.1.2
+            ghcr.io/wisdomsky/cloudflared-web:2024.1.4
