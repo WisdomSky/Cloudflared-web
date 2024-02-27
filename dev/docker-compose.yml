@@ -8,6 +8,7 @@ services:
     network_mode: host
     environment:
       WEBUI_PORT: 1111
+      METRICS_ENABLE: 'true'
     volumes:
       - ./config:/config
       - ../app/backend:/var/app/backend

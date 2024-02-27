@@ -59,9 +59,11 @@ services:
 ## Additional Parameters
 
 ### Environment
-| Variable Name | Default value | Required or Optional | Description |
-|---|---|---|---|
-| WEBUI_PORT | 14333 | _Optional_ | The port on the host where the WebUI will be running. Useful when an existing process is running on port `14333` and want to assign cloudflared-web into a different available port. |
+| Variable Name | Default value | Required or Optional | Description                                                                                                                                                                          |
+|---------------|---------------|---|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| WEBUI_PORT    | 14333         | _Optional_ | The port on the host where the WebUI will be running. Useful when an existing process is running on port `14333` and want to assign cloudflared-web into a different available port. |
+| METRICS_ENABLE | false | _Optional_ | Enable [tunnel metrics](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/monitor-tunnels/metrics/) server.                                              |
+| METRICS_PORT  | 60123 | _Optional_ | Specify port to run tunnel metrics on. `METRICS_ENABLE` must be set to `true`.                                                                                                         |
 
 example `docker-compose.yaml`:
 ```yaml
@@ -91,6 +93,20 @@ services:
       - /mnt/storage/cloudflared/config:/config
 ```
 
+## Using Networks
+
+You can use docker `networks` for a more fine-grained control of which containers/services your cloudflared-web container has access to.
+
+```yaml
+services:
+  cloudflared:
+    image: wisdomsky/cloudflared-web:latest
+    restart: unless-stopped
+    networks:
+      - mynetwork
+    environment:
+      WEBUI_PORT: 1111
+```
 
 ## Screenshots
 
