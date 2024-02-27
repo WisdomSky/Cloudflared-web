@@ -8,7 +8,7 @@ const fs = require('fs');
 
 const { execSync } = require("node:child_process");
 
-const { CloudflaredTunnel } = require('node-cloudflared-tunnel');
+const { CloudflaredTunnel } = require('./cloudflare-tunnel.js');
 const tunnel = new CloudflaredTunnel();
 
 const configpath = "/config/config.json";
@@ -123,7 +123,14 @@ function init(config, res) {
   tunnel.token = config.token;
   try {
     if (config.start) {
-      tunnel.start();
+
+      let additionalArgs = {}
+
+      if (process.env.METRICS_ENABLE == 'true') {
+        additionalArgs.metrics = process.env.METRICS_PORT;
+      }
+
+      tunnel.start(additionalArgs);
       if (res !== undefined) {
         res.status(200).send('Started');
       }
