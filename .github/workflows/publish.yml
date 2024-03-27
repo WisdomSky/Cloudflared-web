@@ -43,4 +43,4 @@ jobs:
             wisdomsky/cloudflared-web:latest
             wisdomsky/cloudflared-web:2024.3.0
             ghcr.io/wisdomsky/cloudflared-web:latest
-            ghcr.io/wisdomsky/cloudflared-web:2024.2.1
+            ghcr.io/wisdomsky/cloudflared-web:2024.3.0
