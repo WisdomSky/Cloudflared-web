@@ -31,6 +31,14 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      -
+        name: Extract version from Dockerfile
+        run: |
+          CLOUDFLARED_VERSION=$(grep -oP '(?<=ARG CLOUDFLARED_VERSION=).*' Dockerfile)
+          echo "version is $CLOUDFLARED_VERSION"
+          echo "DOCKER_TAG=$CLOUDFLARED_VERSION" >> $GITHUB_ENV
+
       -
         name: Build and push
         uses: docker/build-push-action@v5
@@ -41,6 +49,6 @@ jobs:
           push: true
           tags: |
             wisdomsky/cloudflared-web:latest
-            wisdomsky/cloudflared-web:2024.3.0
+            wisdomsky/cloudflared-web:${{ env.DOCKER_TAG }}
             ghcr.io/wisdomsky/cloudflared-web:latest
-            ghcr.io/wisdomsky/cloudflared-web:2024.3.0
+            ghcr.io/wisdomsky/cloudflared-web:${{ env.DOCKER_TAG }}
