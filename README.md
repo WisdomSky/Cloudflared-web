@@ -123,4 +123,6 @@ https://github.com/WisdomSky/Cloudflared-web/issues
 
 ---
 
-Last build on 04-11-2024
+Last build on 04-24-2024
+
+![version number](https://img.shields.io/docker/v/wisdomsky/cloudflared-web/latest)
