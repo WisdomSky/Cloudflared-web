@@ -63,11 +63,13 @@ services:
 ## Additional Parameters
 
 ### Environment
-| Variable Name | Default value | Required or Optional | Description                                                                                                                                                                          |
-|---------------|---------------|---|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| WEBUI_PORT    | 14333         | _Optional_ | The port on the host where the WebUI will be running. Useful when an existing process is running on port `14333` and want to assign cloudflared-web into a different available port. |
-| METRICS_ENABLE | false | _Optional_ | Enable [tunnel metrics](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/monitor-tunnels/metrics/) server.                                              |
-| METRICS_PORT  | 60123 | _Optional_ | Specify port to run tunnel metrics on. `METRICS_ENABLE` must be set to `true`.                                                                                                         |
+| Variable Name   | Default value | Required or Optional | Description                                                                                                                                                                          |
+|-----------------|---------------|---|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| WEBUI_PORT      | 14333         | _Optional_ | The port on the host where the WebUI will be running. Useful when an existing process is running on port `14333` and want to assign cloudflared-web into a different available port. |
+| METRICS_ENABLE  | false         | _Optional_ | Enable [tunnel metrics](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/monitor-tunnels/metrics/) server.                                              |
+| METRICS_PORT    | 60123         | _Optional_ | Specify port to run tunnel metrics on. `METRICS_ENABLE` must be set to `true`.                                                                                                       |
+| BASIC_AUTH_PASS |               | _Optional_ | Enable Basic Auth by specifying a password. If `BASIC_AUTH_USER` is not specified, the default value for username `admin` will be used.                                              |
+| BASIC_AUTH_USER | admin         | _Optional_ | Specify the username for the Basic Auth.                                                                                                                                             |
 
 example `docker-compose.yaml`:
 ```yaml
