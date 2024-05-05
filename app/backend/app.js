@@ -5,6 +5,7 @@ const path = require('path');
 const bodyParser = require('body-parser')
 const cors = require('cors');
 const fs = require('fs');
+const basicAuth = require('express-basic-auth')
 
 const { execSync } = require("node:child_process");
 
@@ -20,6 +21,22 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors());
 
 app.use(express.static(viewpath));
+
+if (!!process.env.BASIC_AUTH_PASS) {
+  let users = {};
+
+  let user = process.env.BASIC_AUTH_USER || 'admin';
+
+  users[user] = process.env.BASIC_AUTH_PASS;
+
+  app.use(basicAuth({
+    users: users,
+    challenge: true
+  }))
+
+}
+
+
 
 app.get('/', (req, res) => {
   res.sendFile(viewpath + "index.html");

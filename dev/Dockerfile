@@ -19,7 +19,7 @@ EXPOSE ${METRICS_PORT}
 USER root
 WORKDIR /var/app
 
-RUN apt update && apt upgrade && apt install curl -y
+RUN apt update && apt upgrade -y && apt install -y curl
 
 RUN if [ "$TARGETVARIANT" = "v7" ]; then \
         CLOUDFLARED_PKG="cloudflared-$TARGETOS-${TARGETARCH}hf.deb"; \
