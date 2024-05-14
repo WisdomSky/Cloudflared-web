@@ -48,7 +48,7 @@ jobs:
           provenance: false
           push: true
           tags: |
-            wisdomsky/cloudflared-web:${{ env.DOCKER_TAG }}
-            wisdomsky/cloudflared-web:latest
-            ghcr.io/wisdomsky/cloudflared-web:${{ env.DOCKER_TAG }}
+            wisdomsky/cloudflared-web:${{ env.DOCKER_TAG }},
+            wisdomsky/cloudflared-web:latest,
+            ghcr.io/wisdomsky/cloudflared-web:${{ env.DOCKER_TAG }},
             ghcr.io/wisdomsky/cloudflared-web:latest
