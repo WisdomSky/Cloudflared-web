@@ -1,4 +1,4 @@
-name: build
+name: Build
 
 on:
   push:
@@ -48,7 +48,7 @@ jobs:
           provenance: false
           push: true
           tags: |
-            wisdomsky/cloudflared-web:latest
             wisdomsky/cloudflared-web:${{ env.DOCKER_TAG }}
-            ghcr.io/wisdomsky/cloudflared-web:latest
+            wisdomsky/cloudflared-web:latest
             ghcr.io/wisdomsky/cloudflared-web:${{ env.DOCKER_TAG }}
+            ghcr.io/wisdomsky/cloudflared-web:latest

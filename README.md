@@ -3,7 +3,7 @@
 _Cloudflared-web is a docker image that packages both cloudflared cli and a no-frills Web UI for easy starting/stopping of cloudflare tunnel._
 
 
-[![build](https://github.com/WisdomSky/Cloudflared-web/workflows/build/badge.svg)](https://hub.docker.com/r/wisdomsky/cloudflared-web "Build Status")
+[![build](https://github.com/WisdomSky/Cloudflared-web/workflows/Build/badge.svg)](https://github.com/WisdomSky/Cloudflared-web/actions "Build Status")
 [![latest](https://img.shields.io/docker/v/wisdomsky/cloudflared-web/latest?label=Latest)](https://hub.docker.com/r/wisdomsky/cloudflared-web/tags "Latest Tag")
 [![pulls](https://img.shields.io/docker/pulls/wisdomsky/cloudflared-web?label=Pulls)](https://hub.docker.com/r/wisdomsky/cloudflared-web "Docker Hub Pulls")
 [![stars](https://img.shields.io/docker/stars/wisdomsky/cloudflared-web?label=%E2%AD%90)](https://hub.docker.com/r/wisdomsky/cloudflared-web "Docker Hub Stars")
