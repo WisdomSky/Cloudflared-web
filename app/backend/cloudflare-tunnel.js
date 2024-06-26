@@ -93,6 +93,11 @@ class CloudflaredTunnel {
             "--no-autoupdate",
         ];
 
+        if (!!additionalArgs.configPath) {
+            args.push("--config");
+            args.push(additionalArgs.configPath);
+        }
+
         if (!!additionalArgs.metrics) {
             args.push("--metrics");
             args.push(`0.0.0.0:${additionalArgs.metrics}`);

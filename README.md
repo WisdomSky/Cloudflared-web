@@ -1,6 +1,6 @@
 # [Cloudflared-web](https://github.com/WisdomSky/Cloudflared-web)
 
-_Cloudflared-web is a docker image that packages both cloudflared cli and a no-frills Web UI for easy starting/stopping of cloudflare tunnel._
+_Cloudflared-web is a docker image that packages both cloudflared cli and a simple Web UI to easily start or stop remotely-managed Cloudflare tunnel._
 
 
 [![build](https://github.com/WisdomSky/Cloudflared-web/workflows/Build/badge.svg)](https://github.com/WisdomSky/Cloudflared-web/actions "Build Status")
@@ -20,7 +20,7 @@ _Cloudflared-web is a docker image that packages both cloudflared cli and a no-f
 
 #### Cons
 
-❌ Only supports Cloudflare Tunnel.
+❌ Only supports [Remotely-managed Tunnels](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/remote-management/).
 
 ❌ Can only update hostname policies through the [ZeroTrust](https://one.dash.cloudflare.com/) dashboard.
 
