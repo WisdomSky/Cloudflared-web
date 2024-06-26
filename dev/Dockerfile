@@ -30,6 +30,7 @@ RUN if [ "$TARGETVARIANT" = "v7" ]; then \
     dpkg -i cloudflared.deb && \
     rm cloudflared.deb
 
+VOLUME /root/.cloudflared
 VOLUME /config
 
 VOLUME /var/app/backend

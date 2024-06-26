@@ -1,77 +1,152 @@
 <template>
-  <div>
-    <div>
-      <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/cloudflare.svg" class="cf-logo"
-           alt="Cloudflare">
-    </div>
+  <div class="cf-container h-[100vh] flex items-center justify-center">
     <form id="cf-form" method="post" @submit.prevent>
-      <div>
-        <div>
-          <h4>Enter Cloudflare Tunnel Connector Token</h4>
+      <Card class="w-[550px]">
+        <CardHeader>
+          <CardTitle class="flex">
+            <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/cloudflare.svg" class="h-[25px]" alt="Cloudflare Logo">
+            <span class="ml-3">Cloudflared-web</span>
+          </CardTitle>
+          <CardDescription>A simple UI to run Cloudflare Tunnel</CardDescription>
+        </CardHeader>
+        <CardContent>
+
+          <Alert v-if="updateInfo.update" variant="default" class="mb-4" style="background-color: #fff; color: #777; border-color: #aa0">
+            <AlertTitle>💡 A new version is available!</AlertTitle>
+            <AlertDescription class="ml-2 mt-2">
+              Update the docker image tag into <strong>{{ updateInfo.latest_version }}</strong> to use the latest version.
+            </AlertDescription>
+          </Alert>
+
+          <form id="cf-form" method="post" @submit.prevent>
+            <div class="grid items-center w-full gap-4">
+              <div class="flex flex-col space-y-1.5">
+                <Label>Enter Tunnel Connector Token:</Label>
+                <div class="flex w-full items-center gap-1.5">
+                  <HoverCard :open-delay="100" :close-delay="100" v-if="!tipDontShowAgain && token.trim().length === 0">
+                    <HoverCardTrigger as-child>
+                      <Input id="name" placeholder="cloudflared service install eyJhIjoiO34sdfsdf43wrwsefs43csefw3" v-model="token" />
+                    </HoverCardTrigger>
+                    <HoverCardContent class="w-[400px] p-2" style="background-color: #fff">
+                      <h5>💡 Tip</h5>
+                      <hr class="mt-2">
+                      <div class="p-2">
+                        <small>You can also enter the entire command into the input like:
+                          <br>
+                          <code style="border:1px solid hsl(var(--input));border-radius: 5px;padding: 5px;">cloudflared service install eyJhIjoiO...</code>
+                          <br>
+                          The token will be automatically extracted from it.
+                        </small>
+                      </div>
+                      <div class="flex w-full justify-end mt-2">
+                        <Button @click="tipDontShowAgain = true" size="xs" variant="outline">Do not show again</Button>
+                      </div>
+                    </HoverCardContent>
+                  </HoverCard>
+                  <Input id="name" placeholder="cloudflared service install eyJhIjoiO34sdfsdf43wrwsefs43csefw3" v-model="token" :disabled="config.start" v-else/>
+                  <Button v-if="changed || token.trim().length == 0" @click.prevent="save" class="start-btn">Save</Button>
+                  <Button v-else-if="token.trim().length && !empty" @click.prevent="start" class="start-btn" :class="{running: config.start}" :title="config.start ? 'Cloudflared is currently running': 'Cloudflared is not running'">
+                    {{ config.start ? 'Stop' : 'Start' }}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </CardContent>
+        <CardFooter class="flex justify-center px-6 pb-6">
+<!--          <Dialog>-->
+<!--            <DialogTrigger as-child>-->
+<!--              <Button variant="link" size="xs">-->
+<!--                Local Configuration-->
+<!--              </Button>-->
+<!--            </DialogTrigger>-->
+<!--            <DialogContent class="sm:max-w-[800px] grid-rows-[auto_minmax(0,1fr)_auto] p-0 h-[90vh]">-->
+<!--              <DialogHeader class="p-6 pb-0">-->
+<!--                <DialogTitle>Advanced Configuration</DialogTitle>-->
+<!--                <DialogDescription>-->
+<!--                  For advanced Cloudflare Tunnel configuration. See the-->
+<!--                  <a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/local-management/configuration-file/" style="color: #f70" target="_blank">documentation</a>-->
+<!--                  for more information.-->
+<!--                </DialogDescription>-->
+<!--              </DialogHeader>-->
+<!--              <div class="grid gap-4 py-4 overflow-y-auto px-6">-->
+<!--                <div class="flex flex-col">-->
+<!--                  <prism-editor :readonly="config.start" v-model="yaml" :highlight="highlighter" line-numbers :tab-size="4"-->
+<!--                    placeholder="ingress:"-->
+<!--                  ></prism-editor>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <DialogFooter class="p-6 pt-0 flex justify-between" v-if="!config.start">-->
+<!--                <Button variant="link" @click="yaml = ''">Clear</Button>-->
+<!--                <Button type="submit" @click="saveConfig">-->
+<!--                  Save Config-->
+<!--                </Button>-->
+<!--              </DialogFooter>-->
+<!--            </DialogContent>-->
+<!--          </Dialog>-->
+
+        </CardFooter>
+        <div class="flex items-center justify-center" style="font-size: 0.65em">
+          <a href="https://one.dash.cloudflare.com" target="_blank" class="inline-flex items-center">
+            <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/cloudflare.svg" class="w-[20px] mr-1" alt="Cloudflare Logo">
+            ZeroTrust Dashboard
+          </a>
+          <div class="inline mx-3" style="color: #777">|</div>
+          <a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/install-and-setup/tunnel-guide/remote/#1-create-a-tunnel" target="_blank" class="inline-flex">
+            Create a Cloudflare Tunnel
+          </a>
+          <div class="inline mx-3" style="color: #777">|</div>
+          <a href="https://github.com/WisdomSky/Cloudflared-web" target="_blank" class="inline-flex items-center">
+            <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/github.svg" class="w-[15px] mr-1" alt="Github Logo" style="filter: invert(1)">
+            Github
+          </a>
         </div>
-        <input type="text" name="token" v-model="token"
-               placeholder="cloudflared service install eyJhIjoiO34sdfsdf43wrwsefs43csefw3">
-      </div>
-      <div>
-        <button v-if="changed || token.trim().length == 0" @click.prevent="save">Save</button>
-        <button v-if="token.trim().length && !empty" @click.prevent="start" :class="{running: config.start}">
-          {{ config.start ? 'Stop' : 'Start' }}
-        </button>
-        <button @click.prevent="openZeroTrustDashboard"
-                style="margin-left:20px;display: inline-flex;align-items: center;"
-                title="Open Cloudflare ZeroTrust Dashboard in a new window"
-        >
-          ZeroTrust Dashboard
-          <svg style="margin-left: 5px" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" stroke="#ffffff"
-               fill="#ffffff" height="25" viewBox="0 0 32 32">
-            <path
-                d="M 18 5 L 18 7 L 23.5625 7 L 11.28125 19.28125 L 12.71875 20.71875 L 25 8.4375 L 25 14 L 27 14 L 27 5 Z M 5 9 L 5 27 L 23 27 L 23 14 L 21 16 L 21 25 L 7 25 L 7 11 L 16 11 L 18 9 Z"></path>
-          </svg>
-        </button>
-      </div>
-      <div class="new-version" v-if="updateInfo.update">
-        💡 [{{ updateInfo.latest_version }}] A new update is available. Update the docker image in order to update the
-        version.
-      </div>
-      <div style="margin-top: 20px; text-align: center">
-        How to create a Cloudflare Tunnel?&nbsp;<a
-          href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/install-and-setup/tunnel-guide/remote/#1-create-a-tunnel"
-          target="_blank">Read here</a>
-      </div>
+        <Separator class="my-2" />
+        <div class="flex justify-center mb-2" style="color: #777; font-size: 0.6em" v-if="version.trim().length">
+          <code>{{ version }}</code>
+        </div>
+      </Card>
+
     </form>
-    <div class="credits">
-      <a href="https://github.com/WisdomSky/Cloudflared-web" title="github.com/WisdomSky/Cloudflared-web">
-        <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/github.svg" style="height: 20px;">
-      </a>
-    </div>
-    <div class="version" v-if="version.trim().length">
-      <small>
-        <code>{{ version }}</code>
-      </small>
-    </div>
-    <div class="tip" v-if="!hideTip">
-      <h5>💡 Quick Tip</h5>
-      <hr>
-      <small>You can input the whole command like:<br>
-        <code>cloudflared service install eyJhIjoiO...</code><br>
-        and we will take care of extracting the token from it.</small>
-      <div>
-        <button @click="doHideTip">Hide</button>&nbsp;
-        <label>
-          <input type="checkbox" v-model="tipDontShowAgain"> Do not show again
-        </label>
-      </div>
-    </div>
+
+    <Toaster class="pointer-events-auto" />
   </div>
 </template>
 
 
 <script setup lang="ts">
+
   import {ref, reactive, onBeforeMount, watch} from 'vue'
+  import Button from "@/components/ui/button/Button.vue";
+  import { useColorMode } from '@vueuse/core'
+  import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+  import { Alert, AlertTitle, AlertDescription} from "@/components/ui/alert";
+  import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
+  import Separator from "@/components/ui/separator/Separator.vue";
+  import Input from "@/components/ui/input/Input.vue";
+  import {Label} from "radix-vue";
+  import { Toaster } from '@/components/ui/sonner'
+  // import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+  // import {PrismEditor} from "vue-prism-editor";
+  // import 'vue-prism-editor/dist/prismeditor.min.css'; // import the styles somewhere
+  // import { highlight, languages } from 'prismjs';
+  // import 'prismjs/components/prism-yaml';
+  // import 'prismjs/themes/prism-tomorrow.css'; // import syntax highlighting styles
+  // import { toast } from 'vue-sonner'
+
+
+  useColorMode();
+
+
+  const yaml = ref<string>("");
+
+  // const highlighter = (code: string) => highlight(code, languages.yaml, 'yaml');
+
+
 
   const endpoint = "";
 
-  const config = reactive<{ token: string, start: boolean }>({token: '', start: false});
+  const config = reactive<{ config: string, token: string, start: boolean }>({config: '', token: '', start: false});
 
   const token = ref<string>('');
 
@@ -80,8 +155,6 @@
   watch(tipDontShowAgain, () => {
     localStorage.setItem('tip_dont_show_again', tipDontShowAgain.value ? 'true' : 'false');
   });
-
-  const hideTip = ref<boolean>(tipDontShowAgain.value);
 
   const version = ref<string>('');
 
@@ -144,9 +217,27 @@
 
   }
 
+
+  // async function saveConfig() {
+  //   const res = await fetch(endpoint + '/advanced/config/local', {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       yaml: yaml.value
+  //     })
+  //   })
+  //
+  //   toast(res.status === 200 ? 'Save Successful' : 'Save Failed', {
+  //     description: await res.text()
+  //   })
+  // }
+
   async function init() {
 
     version.value = await (await fetch(endpoint + '/version')).text();
+    yaml.value = await (await fetch(endpoint + '/advanced/config/local')).text();
 
     const json = await (await fetch(endpoint + '/config')).json();
     config.token = json.token;
@@ -173,115 +264,39 @@
 
   }
 
-
-  function doHideTip() {
-    hideTip.value = true;
-  }
-
-
-  function openZeroTrustDashboard() {
-    window.open('https://one.dash.cloudflare.com', '_blank');
-  }
-
-
 </script>
 
 
 <style scoped lang="scss">
-.cf-logo {
-  height: 15vh;
-}
 
-input[type=text] {
-  width: 50vw;
-  max-width: 500px;
-  min-width: 300px;
-  outline: none;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 1.25em;
-}
+.cf-container {
 
-button {
-  margin-top: 20px;
-  background-color: #c98816;
-  outline: none;
-  border: 2px solid #f1c577;
-  padding: 10px 50px;
-  font-size: 1.25em;
-  color: #fff;
+  button.start-btn {
+    background-color: #c98816;
+    color: #fff;
 
 
-  &.running {
-    background-color: #a33;
-    border-color: #e98181;
-  }
-
-  &:hover {
-    opacity: 0.75;
-  }
-
-  &:active {
-    opacity: 1 !important;
-    box-shadow: 0 0 15px 0 #dbb378a0;
-
-  }
-
-}
-
-.new-version {
-  max-width: 500px;
-  margin-top: 10px;
-  background: rgba(255, 255, 0, 0.1);
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.credits {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.tip {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  max-width: 500px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 10px;
-  box-sizing: border-box;
-  text-align: left;
-  box-shadow: 0 5px 10px 5px rgba(0, 0, 0, 0.2);
-
-  h5 {
-    margin: 0;
-    color: #FF8B00;
-  }
-
-  button {
-    padding: 5px 10px;
-    font-size: 0.65em;
-  }
-
-  label {
-    vertical-align: center;
-    font-size: 0.65em;
-
-    input {
-      vertical-align: middle;
+    &.running {
+      background-color: #a33;
     }
+
+    &:hover {
+      opacity: 0.75;
+    }
+
+    &:active {
+      opacity: 1 !important;
+      box-shadow: 0 0 15px 0 #dbb378a0;
+
+    }
+
   }
 
-}
 
-.version {
-  position: absolute;
-  top: 0;
-  right: 10px;
+  a:hover {
+    text-decoration: underline;
+  }
+
 }
 
 </style>

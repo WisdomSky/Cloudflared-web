@@ -5,6 +5,7 @@ services:
     build: .
     image: cloudflared-web
     container_name: cloudflared-web
+    privileged: true
     network_mode: host
     environment:
       WEBUI_PORT: 1111
@@ -13,5 +14,6 @@ services:
       - ./config:/config
       - ../app/backend:/var/app/backend
       - ../app/frontend:/var/app/frontend
+      - ./.cloudflared:/root/.cloudflared
     tty: true
     stdin_open: true

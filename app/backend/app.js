@@ -4,15 +4,18 @@ const port = process.env.WEBUI_PORT;
 const path = require('path');
 const bodyParser = require('body-parser')
 const cors = require('cors');
-const fs = require('fs');
+const fs = require('node:fs');
 const basicAuth = require('express-basic-auth')
-
+const tmp = require('tmp');
 const { execSync } = require("node:child_process");
 
 const { CloudflaredTunnel } = require('./cloudflare-tunnel.js');
 const tunnel = new CloudflaredTunnel();
 
 const configpath = "/config/config.json";
+
+const cloudflaredconfigdir = "/root/.cloudflared";
+const cloudflaredconfigpath = `${cloudflaredconfigdir}/config.yml`;
 
 const viewpath = path.normalize(__dirname + '/../frontend/dist');
 
@@ -109,6 +112,41 @@ app.post('/token', (req, res) => {
 })
 
 
+app.get('/advanced/config/local', (req, res) => {
+
+  res.status(200).set('Content-Type', 'text/plain').send(fs.existsSync(cloudflaredconfigpath) ? fs.readFileSync(cloudflaredconfigpath) : '');
+
+})
+app.post('/advanced/config/local', (req, res) => {
+
+  const tmpobj = tmp.fileSync();
+
+  fs.writeFileSync(tmpobj.name, req.body.yaml);
+
+  try {
+
+    if (req.body.yaml.trim().length) {
+      execSync(`cloudflared --config ${tmpobj.name} tunnel ingress validate`);
+    }
+
+    if (!fs.existsSync(cloudflaredconfigdir)) {
+      fs.mkdirSync(cloudflaredconfigdir)
+    }
+
+    fs.writeFileSync(cloudflaredconfigpath, req.body.yaml);
+
+    tmpobj.removeCallback();
+    res.status(200).send('Changes saved into the config file.');
+
+  } catch (e) {
+    tmpobj.removeCallback();
+    res.status(400).send(e.message.split("\n").splice(1).join("\n"));
+  }
+
+
+})
+
+
 app.listen(port, () => {
   console.log(`WebUI running on port ${port}`);
   let config = getConfig();
@@ -145,6 +183,10 @@ function init(config, res) {
 
       if (process.env.METRICS_ENABLE == 'true') {
         additionalArgs.metrics = process.env.METRICS_PORT;
+      }
+
+      if (fs.existsSync(cloudflaredconfigpath)) {
+        additionalArgs.configPath = cloudflaredconfigpath;
       }
 
       tunnel.start(additionalArgs);

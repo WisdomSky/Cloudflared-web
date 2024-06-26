@@ -31,6 +31,7 @@ RUN if [ "$TARGETVARIANT" = "v7" ]; then \
     rm cloudflared.deb
 
 VOLUME /config
+VOLUME /root/.cloudflared
 
 COPY app/backend /var/app/backend
 COPY app/frontend /var/app/frontend
