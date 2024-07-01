@@ -58,13 +58,16 @@ app.get('/version', (req, res) => {
 app.get('/new-version', async (req, res) => {
   const current_version = process.env.VERSION;
 
-  const resp = await fetch('https://registry.hub.docker.com/v2/repositories/wisdomsky/cloudflared-web/tags/?page_size=100&page=1');
+  let latest_version = current_version;
+  try {
+    const resp = await fetch('https://registry.hub.docker.com/v2/repositories/wisdomsky/cloudflared-web/tags/?page_size=100&page=1');
 
-  const image_info = await resp.json();
+    const image_info = await resp.json();
 
-  const tags = image_info.results.filter(tag => tag.name !== 'latest')
+    const tags = image_info.results.filter(tag => tag.name !== 'latest')
 
-  const latest_version = tags[0].name;
+    latest_version = tags[0].name;
+  } catch (e) {}
 
   res.status(200).set('Content-Type', 'application/json').send({
     current_version,
