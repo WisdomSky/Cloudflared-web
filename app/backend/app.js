@@ -188,6 +188,10 @@ function init(config, res) {
         additionalArgs.metrics = process.env.METRICS_PORT;
       }
 
+      if (['http2','quic'].indexOf(process.env.PROTOCOL)) {
+        additionalArgs.protocol = process.env.PROTOCOL;
+      }
+
       if (fs.existsSync(cloudflaredconfigpath)) {
         additionalArgs.configPath = cloudflaredconfigpath;
       }

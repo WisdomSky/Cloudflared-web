@@ -103,6 +103,11 @@ class CloudflaredTunnel {
             args.push(`0.0.0.0:${additionalArgs.metrics}`);
         }
 
+        if (!!additionalArgs.protocol) {
+            args.push("--protocol");
+            args.push(additionalArgs.protocol);
+        }
+
         args.push("run");
         args.push("--token");
         args.push(this.token);
