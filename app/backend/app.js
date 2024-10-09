@@ -188,6 +188,10 @@ function init(config, res) {
         additionalArgs.metrics = process.env.METRICS_PORT;
       }
 
+      if (['4','6'].indexOf(process.env.EDGE_IP_VERSION)) {
+        additionalArgs.edgeIpVersion = process.env.EDGE_IP_VERSION;
+      }
+
       if (['http2','quic'].indexOf(process.env.PROTOCOL)) {
         additionalArgs.protocol = process.env.PROTOCOL;
       }

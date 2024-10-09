@@ -103,6 +103,11 @@ class CloudflaredTunnel {
             args.push(`0.0.0.0:${additionalArgs.metrics}`);
         }
 
+        if (!!additionalArgs.edgeIpVersion) {
+            args.push("--edge-ip-version");
+            args.push(additionalArgs.edgeIpVersion);
+        }
+
         if (!!additionalArgs.protocol) {
             args.push("--protocol");
             args.push(additionalArgs.protocol);
