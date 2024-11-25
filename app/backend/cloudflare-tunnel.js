@@ -65,8 +65,16 @@ class CloudflaredTunnel {
     }
 
     emitError(msg) {
-        console.error(msg)
-        // throw new Error(msg);
+
+        const imp_err_ids= [
+            "ERR Failed to fetch features, default to disable error",
+            "ERR edge discovery: error looking up Cloudflare edge IPs:"
+        ];
+
+        if (imp_err_ids.some(subStr => msg.includes(subStr))) {
+            throw new Error(msg.split('ERR')[1].trim());
+        }
+
     }
 
     start(additionalArgs = {}) {
@@ -114,14 +122,12 @@ class CloudflaredTunnel {
         args.push("--token");
         args.push(this.token);
 
-        this.running = true;
         this.emitChange("Starting cloudflared");
         this.childProcess = childProcess.spawn(this.cloudflaredPath, args);
         this.childProcess.stdout.pipe(process.stdout);
         this.childProcess.stderr.pipe(process.stderr);
 
         this.childProcess.on("close", (code) => {
-            this.running = false;
             this.childProcess = null;
             this.emitChange("Stopped cloudflared", code);
         });
@@ -135,7 +141,10 @@ class CloudflaredTunnel {
         });
 
         this.childProcess.stderr.on("data", (data) => {
-            this.emitError(data.toString());
+            let msg = data.toString();
+            if (!/\s(INF|WRN)\s/g.test(msg)) {
+                this.emitError(msg);
+            }
         });
     }
 
