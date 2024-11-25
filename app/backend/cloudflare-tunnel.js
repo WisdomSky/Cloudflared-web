@@ -61,15 +61,12 @@ class CloudflaredTunnel {
     }
 
     emitChange(msg, code) {
-        if (this.change) {
-            this.change(this.running, msg, code);
-        }
+        console.log(msg);
     }
 
     emitError(msg) {
-        if (this.error) {
-            this.error(msg);
-        }
+        console.error(msg)
+        throw new Error(msg);
     }
 
     start(additionalArgs = {}) {
