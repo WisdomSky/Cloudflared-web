@@ -66,7 +66,7 @@ class CloudflaredTunnel {
 
     emitError(msg) {
         console.error(msg)
-        throw new Error(msg);
+        // throw new Error(msg);
     }
 
     start(additionalArgs = {}) {
