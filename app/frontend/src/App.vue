@@ -135,7 +135,7 @@
   import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
   import Separator from "@/components/ui/separator/Separator.vue";
   import Input from "@/components/ui/input/Input.vue";
-  import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
+  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
   import {Label} from "radix-vue";
   import { Toaster } from '@/components/ui/sonner'
   import $i18n from './i18n.ts'
@@ -154,7 +154,7 @@
   const yaml = ref<string>("");
 
 
-  const locale = ref<string>(localStorage.getItem('locale') || "en");
+  const locale = ref<any>(localStorage.getItem('locale') || "en");
 
 
   watch(locale, (val) => {
