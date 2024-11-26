@@ -7,46 +7,45 @@
             <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/cloudflare.svg" class="h-[25px]" alt="Cloudflare Logo">
             <span class="ml-3">Cloudflared-web</span>
           </CardTitle>
-          <CardDescription>A simple UI to run Cloudflare Tunnel</CardDescription>
+          <CardDescription>{{ $t('A simple UI to run Cloudflare Tunnel') }}</CardDescription>
         </CardHeader>
         <CardContent>
 
-          <Alert v-if="updateInfo.update" variant="default" class="mb-4" style="background-color: #fff; color: #777; border-color: #aa0">
-            <AlertTitle>💡 A new version is available!</AlertTitle>
-            <AlertDescription class="ml-2 mt-2">
-              Update the docker image tag into <strong>{{ updateInfo.latest_version }}</strong> to use the latest version.
+          <Alert v-if="true || updateInfo.update" variant="default" class="mb-4" style="background-color: #fff; color: #777; border-color: #aa0">
+            <AlertTitle>💡 {{ $t('A new version is available!') }}</AlertTitle>
+            <AlertDescription class="ml-2 mt-2" v-html="$t('updateDockerImage', { version: updateInfo.latest_version })">
             </AlertDescription>
           </Alert>
 
           <form id="cf-form" method="post" @submit.prevent>
             <div class="grid items-center w-full gap-4">
               <div class="flex flex-col space-y-1.5">
-                <Label>Enter Tunnel Connector Token:</Label>
+                <Label>{{ $t('Enter Tunnel Connector Token:') }}</Label>
                 <div class="flex w-full items-center gap-1.5">
                   <HoverCard :open-delay="100" :close-delay="100" v-if="!tipDontShowAgain && token.trim().length === 0">
                     <HoverCardTrigger as-child>
                       <Input id="name" placeholder="cloudflared service install eyJhIjoiO34sdfsdf43wrwsefs43csefw3" v-model="token" />
                     </HoverCardTrigger>
                     <HoverCardContent class="w-[400px] p-2" style="background-color: #fff">
-                      <h5>💡 Tip</h5>
+                      <h5>💡 {{ $t('Tip') }}</h5>
                       <hr class="mt-2">
                       <div class="p-2">
-                        <small>You can also enter the entire command into the input like:
+                        <small>{{ $t('You can also enter the entire command into the input like:') }}
                           <br>
                           <code style="border:1px solid hsl(var(--input));border-radius: 5px;padding: 5px;">cloudflared service install eyJhIjoiO...</code>
                           <br>
-                          The token will be automatically extracted from it.
+                          {{ $t('The token will be automatically extracted from it.') }}
                         </small>
                       </div>
                       <div class="flex w-full justify-end mt-2">
-                        <Button @click="tipDontShowAgain = true" size="xs" variant="outline">Do not show again</Button>
+                        <Button @click="tipDontShowAgain = true" size="xs" variant="outline">{{ $t('Do not show again') }}</Button>
                       </div>
                     </HoverCardContent>
                   </HoverCard>
                   <Input id="name" placeholder="cloudflared service install eyJhIjoiO34sdfsdf43wrwsefs43csefw3" v-model="token" :disabled="config.start" v-else/>
-                  <Button v-if="changed || token.trim().length == 0" @click.prevent="save" class="start-btn">Save</Button>
-                  <Button v-else-if="token.trim().length && !empty" @click.prevent="start" class="start-btn" :class="{running: config.start}" :title="config.start ? 'Cloudflared is currently running': 'Cloudflared is not running'">
-                    {{ config.start ? 'Stop' : 'Start' }}
+                  <Button v-if="changed || token.trim().length == 0" @click.prevent="save" class="start-btn">{{ $t('Save') }}</Button>
+                  <Button v-else-if="token.trim().length && !empty" @click.prevent="start" class="start-btn" :class="{running: config.start}" :title="config.start ? $t('Cloudflared is currently running') : $t('Cloudflared is not running')">
+                    {{ config.start ? $t('Stop') : $t('Start') }}
                   </Button>
                 </div>
               </div>
@@ -54,51 +53,51 @@
           </form>
         </CardContent>
         <CardFooter class="flex justify-center px-6 pb-6">
-<!--          <Dialog>-->
-<!--            <DialogTrigger as-child>-->
-<!--              <Button variant="link" size="xs">-->
-<!--                Local Configuration-->
-<!--              </Button>-->
-<!--            </DialogTrigger>-->
-<!--            <DialogContent class="sm:max-w-[800px] grid-rows-[auto_minmax(0,1fr)_auto] p-0 h-[90vh]">-->
-<!--              <DialogHeader class="p-6 pb-0">-->
-<!--                <DialogTitle>Advanced Configuration</DialogTitle>-->
-<!--                <DialogDescription>-->
-<!--                  For advanced Cloudflare Tunnel configuration. See the-->
-<!--                  <a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/local-management/configuration-file/" style="color: #f70" target="_blank">documentation</a>-->
-<!--                  for more information.-->
-<!--                </DialogDescription>-->
-<!--              </DialogHeader>-->
-<!--              <div class="grid gap-4 py-4 overflow-y-auto px-6">-->
-<!--                <div class="flex flex-col">-->
-<!--                  <prism-editor :readonly="config.start" v-model="yaml" :highlight="highlighter" line-numbers :tab-size="4"-->
-<!--                    placeholder="ingress:"-->
-<!--                  ></prism-editor>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <DialogFooter class="p-6 pt-0 flex justify-between" v-if="!config.start">-->
-<!--                <Button variant="link" @click="yaml = ''">Clear</Button>-->
-<!--                <Button type="submit" @click="saveConfig">-->
-<!--                  Save Config-->
-<!--                </Button>-->
-<!--              </DialogFooter>-->
-<!--            </DialogContent>-->
-<!--          </Dialog>-->
+          <!--          <Dialog>-->
+          <!--            <DialogTrigger as-child>-->
+          <!--              <Button variant="link" size="xs">-->
+          <!--                {{ $t('Local Configuration') }}-->
+          <!--              </Button>-->
+          <!--            </DialogTrigger>-->
+          <!--            <DialogContent class="sm:max-w-[800px] grid-rows-[auto_minmax(0,1fr)_auto] p-0 h-[90vh]">-->
+          <!--              <DialogHeader class="p-6 pb-0">-->
+          <!--                <DialogTitle>{{ $t('Advanced Configuration') }}</DialogTitle>-->
+          <!--                <DialogDescription>-->
+          <!--                  {{ $t('For advanced Cloudflare Tunnel configuration. See the') }}-->
+          <!--                  <a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/local-management/configuration-file/" style="color: #f70" target="_blank">{{ $t('documentation') }}</a>-->
+          <!--                  {{ $t('for more information.') }}-->
+          <!--                </DialogDescription>-->
+          <!--              </DialogHeader>-->
+          <!--              <div class="grid gap-4 py-4 overflow-y-auto px-6">-->
+          <!--                <div class="flex flex-col">-->
+          <!--                  <prism-editor :readonly="config.start" v-model="yaml" :highlight="highlighter" line-numbers :tab-size="4"-->
+          <!--                    placeholder="ingress:"-->
+          <!--                  ></prism-editor>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--              <DialogFooter class="p-6 pt-0 flex justify-between" v-if="!config.start">-->
+          <!--                <Button variant="link" @click="yaml = ''">{{ $t('Clear') }}</Button>-->
+          <!--                <Button type="submit" @click="saveConfig">-->
+          <!--                  {{ $t('Save Config') }}-->
+          <!--                </Button>-->
+          <!--              </DialogFooter>-->
+          <!--            </DialogContent>-->
+          <!--          </Dialog>-->
 
         </CardFooter>
         <div class="flex items-center justify-center" style="font-size: 0.65em">
           <a href="https://one.dash.cloudflare.com" target="_blank" class="inline-flex items-center">
             <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/cloudflare.svg" class="w-[20px] mr-1" alt="Cloudflare Logo">
-            ZeroTrust Dashboard
+            {{ $t('ZeroTrust Dashboard') }}
           </a>
           <div class="inline mx-3" style="color: #777">|</div>
           <a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/install-and-setup/tunnel-guide/remote/#1-create-a-tunnel" target="_blank" class="inline-flex">
-            Create a Cloudflare Tunnel
+            {{ $t('Create a Cloudflare Tunnel') }}
           </a>
           <div class="inline mx-3" style="color: #777">|</div>
           <a href="https://github.com/WisdomSky/Cloudflared-web" target="_blank" class="inline-flex items-center">
             <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/github.svg" class="w-[15px] mr-1" alt="Github Logo" style="filter: invert(1)">
-            Github
+            {{ $t('Github') }}
           </a>
         </div>
         <Separator class="my-2" />
@@ -110,8 +109,20 @@
     </form>
 
     <Toaster class="pointer-events-auto" />
+    <div class="locale">
+      <Select style="border: 0" v-model="locale">
+        <SelectTrigger>
+          <SelectValue placeholder="Select a Language" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="en">EN</SelectItem>
+          <SelectItem value="zh-CN">中文</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
   </div>
 </template>
+
 
 
 <script setup lang="ts">
@@ -124,8 +135,10 @@
   import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
   import Separator from "@/components/ui/separator/Separator.vue";
   import Input from "@/components/ui/input/Input.vue";
+  import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
   import {Label} from "radix-vue";
   import { Toaster } from '@/components/ui/sonner'
+  import $i18n from './i18n.ts'
   // import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
   // import {PrismEditor} from "vue-prism-editor";
   // import 'vue-prism-editor/dist/prismeditor.min.css'; // import the styles somewhere
@@ -139,6 +152,15 @@
 
 
   const yaml = ref<string>("");
+
+
+  const locale = ref<string>(localStorage.getItem('locale') || "en");
+
+
+  watch(locale, (val) => {
+    $i18n.global.locale = val;
+    localStorage.setItem('locale', val);
+  })
 
   // const highlighter = (code: string) => highlight(code, languages.yaml, 'yaml');
 
@@ -295,6 +317,18 @@
 
   a:hover {
     text-decoration: underline;
+  }
+
+  .locale {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+    & ::v-deep(button[role="combobox"]) {
+      border: 0;
+      outline: none;
+    }
+
   }
 
 }
