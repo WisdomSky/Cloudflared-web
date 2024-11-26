@@ -11,7 +11,7 @@
         </CardHeader>
         <CardContent>
 
-          <Alert v-if="true || updateInfo.update" variant="default" class="mb-4" style="background-color: #fff; color: #777; border-color: #aa0">
+          <Alert v-if="updateInfo.update" variant="default" class="mb-4" style="background-color: #fff; color: #777; border-color: #aa0">
             <AlertTitle>💡 {{ $t('A new version is available!') }}</AlertTitle>
             <AlertDescription class="ml-2 mt-2" v-html="$t('updateDockerImage', { version: updateInfo.latest_version })">
             </AlertDescription>
