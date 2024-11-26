@@ -127,3 +127,12 @@ services:
 ## Issues
 
 For any problems experienced while using the docker image, please [create a new issue](https://github.com/WisdomSky/Cloudflared-web/issues).
+
+--- 
+
+## Contribute
+
+
+### Adding A Language Translation
+
+See [Localization](https://github.com/WisdomSky/Cloudflared-web/wiki/Localization).
