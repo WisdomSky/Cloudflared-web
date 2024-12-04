@@ -184,15 +184,15 @@ function init(config, res) {
 
       let additionalArgs = {}
 
-      if (process.env.METRICS_ENABLE == 'true') {
+      if (process.env.METRICS_ENABLE === 'true') {
         additionalArgs.metrics = process.env.METRICS_PORT;
       }
 
-      if (['4','6'].indexOf(process.env.EDGE_IP_VERSION)) {
+      if (['4','6'].indexOf(process.env.EDGE_IP_VERSION) !== -1) {
         additionalArgs.edgeIpVersion = process.env.EDGE_IP_VERSION;
       }
 
-      if (['http2','quic'].indexOf(process.env.PROTOCOL)) {
+      if (['http2','quic'].indexOf(process.env.PROTOCOL) !== -1) {
         additionalArgs.protocol = process.env.PROTOCOL;
       }
 
