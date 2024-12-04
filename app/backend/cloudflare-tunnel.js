@@ -113,6 +113,26 @@ class CloudflaredTunnel {
             args.push(additionalArgs.edgeIpVersion);
         }
 
+        if (!!additionalArgs.edgeBindAddress) {
+            args.push("--edge-bind-address");
+            args.push(additionalArgs.edgeBindAddress);
+        }
+
+        if (!!additionalArgs.gracePeriod) {
+            args.push("--grace-period");
+            args.push(additionalArgs.gracePeriod);
+        }
+
+        if (!!additionalArgs.region) {
+            args.push("--region");
+            args.push(additionalArgs.region);
+        }
+
+        if (!!additionalArgs.retries) {
+            args.push("--retries");
+            args.push(additionalArgs.retries);
+        }
+
         if (!!additionalArgs.protocol) {
             args.push("--protocol");
             args.push(additionalArgs.protocol);

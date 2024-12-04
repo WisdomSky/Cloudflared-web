@@ -188,6 +188,22 @@ function init(config, res) {
         additionalArgs.metrics = process.env.METRICS_PORT;
       }
 
+      if ('EDGE_BIND_ADDRESS' in process.env) {
+        additionalArgs.edgeBindAddress = process.env.EDGE_BIND_ADDRESS;
+      }
+
+      if ('GRACE_PERIOD' in process.env) {
+        additionalArgs.gracePeriod = process.env.GRACE_PERIOD;
+      }
+
+      if ('REGION' in process.env) {
+        additionalArgs.region = process.env.REGION;
+      }
+
+      if ('RETRIES' in process.env) {
+        additionalArgs.retries = process.env.RETRIES;
+      }
+
       if (['4','6'].indexOf(process.env.EDGE_IP_VERSION) !== -1) {
         additionalArgs.edgeIpVersion = process.env.EDGE_IP_VERSION;
       }

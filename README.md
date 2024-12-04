@@ -63,15 +63,22 @@ services:
 ## Additional Parameters
 
 ### Environment
-| Variable Name   | Default value | Required or Optional | Description                                                                                                                                                                          |
-|-----------------|---------------|---|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| WEBUI_PORT      | 14333         | _Optional_ | The port on the host where the WebUI will be running. Useful when an existing process is running on port `14333` and want to assign cloudflared-web into a different available port. |
-| EDGE_IP_VERSION | auto          | _Optional_ | Specifies the IP address version (IPv4 or IPv6) used to establish a connection between cloudflared and the Cloudflare global network. Available values are `auto`, `4`, and `6`. |
-| PROTOCOL        | auto          | _Optional_ | Specifies the protocol used to establish a connection between cloudflared and the Cloudflare global network. Available values are `auto`, `http2`, and `quic`.                                              |
-| METRICS_ENABLE  | false         | _Optional_ | Enable [tunnel metrics](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/monitor-tunnels/metrics/) server.                                              |
-| METRICS_PORT    | 60123         | _Optional_ | Specify port to run tunnel metrics on. `METRICS_ENABLE` must be set to `true`.                                                                                                       |
-| BASIC_AUTH_PASS |               | _Optional_ | Enable Basic Auth by specifying a password. If `BASIC_AUTH_USER` is not specified, the default value for username `admin` will be used.                                              |
-| BASIC_AUTH_USER | admin         | _Optional_ | Specify the username for the Basic Auth.                                                                                                                                             |
+| Variable Name     | Default value | Required or Optional | Description                                                                                                                                                                                                                                                                                                                         |
+|-------------------|---------------|---|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| WEBUI_PORT        | 14333         | _Optional_ | The port on the host where the WebUI will be running. Useful when an existing process is running on port `14333` and want to assign cloudflared-web into a different available port.                                                                                                                                                |
+| BASIC_AUTH_PASS   |               | _Optional_ | Enable Basic Auth by specifying a password. If `BASIC_AUTH_USER` is not specified, the default value for username `admin` will be used.                                                                                                                                                                                             |
+| BASIC_AUTH_USER   | admin         | _Optional_ | Specify the username for the Basic Auth.                                                                                                                                                                                                                                                                                            |
+| EDGE_BIND_ADDRESS |               | _Optional_ | Specifies the outgoing IP address used to establish a connection between `cloudflared` and the Cloudflare global network.<br/><br/>The IP version of `EDGE_BIND_ADDRESS` will override `EDGE_IP_VERSION` (if provided). For example, if you enter an IPv6 source address, `cloudflared` will always connect to an IPv6 destination. |
+| EDGE_IP_VERSION   | auto          | _Optional_ | Specifies the IP address version (IPv4 or IPv6) used to establish a connection between `cloudflared` and the Cloudflare global network. Available values are `auto`, `4`, and `6`.                                                                                                                                                  |
+| PROTOCOL          | auto          | _Optional_ | Specifies the protocol used to establish a connection between `cloudflared` and the Cloudflare global network. Available values are `auto`, `http2`, and `quic`.                                                                                                                                                                    |
+| GRACE_PERIOD      | 30s           | _Optional_ | When `cloudflared` receives SIGINT/SIGTERM it will stop accepting new requests, wait for in-progress requests to terminate, then shut down. Waiting for in-progress requests will timeout after this grace period, or when a second SIGTERM/SIGINT is received.                                                                     |
+| REGION            |               | _Optional_ | Allows you to choose the regions to which connections are established. Currently the only available value is `us`, which routes all connections through data centers in the United States. Omit or leave empty to connect to the global region.                                                                                     |
+| RETRIES           | 5             | _Optional_ | Specifies the maximum number of retries for connection/protocol errors. Retries use exponential backoff (retrying at `1`, `2`, `4`, `8`, `16` seconds by default), so it is **NOT RECOMMENDED** that you increase this value significantly.                                                                                         |
+| METRICS_ENABLE    | false         | _Optional_ | Enable [tunnel metrics](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/monitor-tunnels/metrics/) server.                                                                                                                                                                                             |
+| METRICS_PORT      | 60123         | _Optional_ | Specify port to run tunnel metrics on. `METRICS_ENABLE` must be set to `true`.                                                                                                                                                                                                                                                      |
+
+Based on Cloudflare [tunel run parameters](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/tunnel-run-parameters/) documentation.
+
 
 example `docker-compose.yaml`:
 ```yaml
@@ -82,6 +89,7 @@ services:
     network_mode: host
     environment:
       WEBUI_PORT: 1111
+      PROTOCOL: http2
 ```
 
 
