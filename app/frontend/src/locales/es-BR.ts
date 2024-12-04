@@ -21,5 +21,7 @@ export default {
     'Save Config': 'Salvar Configuração',
     'ZeroTrust Dashboard': 'Painel ZeroTrust',
     'Create a Cloudflare Tunnel': 'Criar um Cloudflare Tunnel',
-    'Github': 'Github'
+    'Github': 'Github',
+    'Help and support this project by sponsoring us on': 'Ajude e apoie este projeto patrocinando-nos no',
+    'All sponsors will be listed and featured here in the future.': 'Todos os patrocinadores serão listados e apresentados aqui no futuro.'
 }

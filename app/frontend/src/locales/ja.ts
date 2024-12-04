@@ -21,5 +21,7 @@ export default {
     'Save Config': '構成を保存',
     'ZeroTrust Dashboard': 'ZeroTrustダッシュボード',
     'Create a Cloudflare Tunnel': 'Cloudflare Tunnelを作成',
-    'Github': 'Github'
+    'Github': 'Github',
+    'Help and support this project by sponsoring us on': 'このプロジェクトを支援してください',
+    'All sponsors will be listed and featured here in the future.': '将来的にはすべてのスポンサーがここに掲載され、紹介されます。'
 }
