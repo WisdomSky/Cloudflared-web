@@ -105,7 +105,8 @@
           <code>{{ version }}</code>
         </div>
       </Card>
-
+      <div class="mt-10 text-center">Help and support this project by sponsoring us on <a href="https://github.com/sponsors/WisdomSky" target="_blank" class="text-yellow-400 font-bold underline">Github</a>. 💖</div>
+      <div class="text-center text-xs text-gray-600">All sponsors will be listed and featured here in the future.</div>
     </form>
 
     <Toaster class="pointer-events-auto" />
