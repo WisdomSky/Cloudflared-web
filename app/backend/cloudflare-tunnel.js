@@ -67,6 +67,7 @@ class CloudflaredTunnel {
     emitError(msg) {
 
         const imp_err_ids= [
+            "ERR Unable to establish connection with Cloudflare edge",
             "ERR Failed to fetch features, default to disable error",
             "ERR edge discovery: error looking up Cloudflare edge IPs:"
         ];
