@@ -1,7 +1,8 @@
-name = "workerdan"
+name = 'workerdanver1'
 main = "index.js"
 type = "javascript"
 account_id = "4b373ad750503e164fba7edf76322413"
 workers_dev = true
 compatibility_date = "2025-04-08"
 usage_model = "bundled"
+
