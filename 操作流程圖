@@ -1,0 +1,45 @@
+# Cloudflared Web + Cloudflare Worker 專案流程圖
+
+這裡是一個清晰的操作與部署流程圖，幫助你或團隊成員快速理解整個系統架構與流程 🚀
+
+---
+
+```mermaid
+flowchart TD
+
+    A[你 / 開發者] -->|Push 代碼| B[GitHub Repository]
+    B -->|觸發 Actions| C[GitHub Actions Workflow]
+    C -->|讀取 Secrets (.env.local / GitHub Secrets)| D[Cloudflare API]
+    D -->|部署成功| E[Cloudflare Workers]
+
+    E -->|接收請求| F[訪問者]
+    F -->|透過網址存取| G[workers.dev 或自訂域名]
+
+    subgraph Cloudflare Tunnel 管理
+      H[Cloudflared Web UI (Docker)] -->|配置 Tunnel Token| I[Cloudflare Tunnel]
+      I -->|安全連線| J[Raspberry Pi 本地服務]
+      J --> K[Home Assistant / NAS / Media Server]
+    end
+
+    E -->|代理轉發| I
+```
+
+---
+
+## 流程解說
+
+1. ✅ 你開發完成後，push 代碼到 GitHub Repository。
+2. ✅ GitHub Actions 自動觸發，讀取 `.env.local` 或 GitHub Secrets 裡的帳號和 Token 資訊。
+3. ✅ GitHub Actions 自動執行 wrangler deploy，部署到 Cloudflare Workers。
+4. ✅ 使用者（或你自己）通過 workers.dev 或自訂域名訪問你的 Worker，Worker 會代理請求到 Cloudflare Tunnel。
+5. ✅ Cloudflared Web UI 管理 Tunnel 狀態，實現本地服務的安全暴露與管理。
+
+---
+
+## 額外建議 ✅
+
+- 🧩 Docker Compose 管理 Cloudflared Web UI，並配合 Watchtower 實現自動更新。
+- 🛡️ Cloudflare Zero Trust 配置，增強 Tunnel 安全防護層級。
+- 📊 加入健康檢查與即時通知（如 LINE、Telegram Bot），追蹤 Tunnel 及 Worker 狀態。
+
+
