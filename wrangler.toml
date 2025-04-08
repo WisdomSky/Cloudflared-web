@@ -1,4 +1,4 @@
-name = "universal-manager-2025"
+name = 'workerdanver1'
 account_id = "你的 Cloudflare 帳號 ID"
 main = "index.js"
 compatibility_date = "2025-04-08"
