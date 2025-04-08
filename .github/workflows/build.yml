@@ -42,8 +42,8 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/armhf
           push: true
-          tags: |
-            danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
-            danieltheflukr/skyroute-enterprise:latest
-            ghcr.io/danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
-            ghcr.io/danieltheflukr/skyroute-enterprise:latest
+          tags:
+  - danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
+  - danieltheflukr/skyroute-enterprise:latest
+  - ghcr.io/danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
+  - ghcr.io/danieltheflukr/skyroute-enterprise:latest
