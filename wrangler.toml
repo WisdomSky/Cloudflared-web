@@ -1,5 +1,5 @@
-name = 'workerdanver1'
-account_id = "你的 Cloudflare 帳號 ID"
+name = "workerdanver1"
+account_id = "4b373ad750503e164fba7edf76322413"
 main = "index.js"
 compatibility_date = "2025-04-08"
 
@@ -7,12 +7,9 @@ compatibility_date = "2025-04-08"
 command = ""
 
 [vars]
-CF_API_TOKEN = "dummy"
-CF_ACCOUNT_ID = "dummy"
+CF_API_TOKEN = "你的實際 Cloudflare API Token"
+CF_ACCOUNT_ID = "4b373ad750503e164fba7edf76322413"
+PROXY_AUTH_TOKEN = "你自訂的 Proxy 安全驗證 Token"
 
-# wrangler.toml (wrangler v3.88.0^)
 [observability.logs]
 enabled = true
-
-
-
