@@ -1,0 +1,10 @@
+{
+  "name": "cloudflared-web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'No build needed for plain JS worker'"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}
