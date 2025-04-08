@@ -39,6 +39,14 @@ jobs:
           echo "DOCKER_TAG=${VERSION}-${COMMIT_SHA}" >> $GITHUB_ENV
           echo "Version tag: ${VERSION}-${COMMIT_SHA}"
 
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -50,7 +58,13 @@ jobs:
             - danieltheflukr/skyroute-enterprise:latest
             - ghcr.io/danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
             - ghcr.io/danieltheflukr/skyroute-enterprise:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
 
       - name: Notify build success
+        if: success()
         run: echo "✅ SkyRoute-Enterprise Docker image build & push successful!"
 
+      - name: Notify build failure
+        if: failure()
+        run: echo "❌ SkyRoute-Enterprise Docker image build & push failed!"
