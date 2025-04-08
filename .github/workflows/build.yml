@@ -8,6 +8,7 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
@@ -31,19 +32,25 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract version from Dockerfile
+      - name: Extract version from Dockerfile or fallback to commit SHA
         run: |
-          SKYROUTE_VERSION=$(grep -oP '(?<=ARG CLOUDFLARED_VERSION=).*' Dockerfile || echo "2025.4.0")
-          echo "DOCKER_TAG=$SKYROUTE_VERSION" >> $GITHUB_ENV
+          VERSION=$(grep -oP '(?<=ARG CLOUDFLARED_VERSION=).*' Dockerfile || echo "2025.4.0")
+          COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+          echo "DOCKER_TAG=${VERSION}-${COMMIT_SHA}" >> $GITHUB_ENV
+          echo "Version tag: ${VERSION}-${COMMIT_SHA}"
 
-      - name: Build and push Docker image to SkyRoute-Enterprise registries
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64,linux/arm64,linux/armhf
           push: true
           tags:
-  - danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
-  - danieltheflukr/skyroute-enterprise:latest
-  - ghcr.io/danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
-  - ghcr.io/danieltheflukr/skyroute-enterprise:latest
+            - danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
+            - danieltheflukr/skyroute-enterprise:latest
+            - ghcr.io/danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
+            - ghcr.io/danieltheflukr/skyroute-enterprise:latest
+
+      - name: Notify build success
+        run: echo "✅ SkyRoute-Enterprise Docker image build & push successful!"
+
