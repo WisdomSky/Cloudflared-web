@@ -1,0 +1,11 @@
+name = "universal-manager-2025"
+account_id = "你的 Cloudflare 帳號 ID"
+main = "index.js"
+compatibility_date = "2025-04-08"
+
+[build]
+command = ""
+
+[vars]
+CF_API_TOKEN = "dummy"
+CF_ACCOUNT_ID = "dummy"
