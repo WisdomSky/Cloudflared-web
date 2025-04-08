@@ -1,135 +1,76 @@
-# Universal-Infra-Manager-2025-Daniel ✨
+Cloudflare Worker - workerdanver1
 
-這是一套全方位整合的現成基礎服務管理平台：
+🚀 Cloudflare Worker 自動部署 & 測試專案
 
-- ✨ Cloudflare Worker 自動部署
-- ✨ Cloudflared Web UI Docker 容器，管理 Cloudflare Tunnel
-- ✨ GitHub Actions 全自動化部署流程
-- ✨ 完整環境變數設定
+目前專案已整合：
 
----
+✅ GitHub Actions 自動部署
 
-## 工程目錄
+✅ 基礎路由處理（含主頁 / 路由）
 
-```
-Universal-Infra-Manager-2025-Daniel/
-├── .github/workflows/deploy.yml           # GitHub Actions 部署檔
-├── .github/ISSUE_TEMPLATE/bug_report.md   # 問題報告檔
-├── cloudflared-web/                       # Cloudflared Web UI Docker 原始碼
-├── index.js                               # Cloudflare Worker 主程式
-├── package.json                           # NPM 資料檔
-├── wrangler.toml                          # Wrangler 設定
-├── .env.local                             # 環境變數檔 (自動化用)
-└── README.md                              # 工程說明
-```
+✅ Cloudflare 全球邊緣網路部署
 
----
 
-## 快速啟動
+🌟 功能說明
 
-### 1. 下載頁面
+路由結構：
 
-```bash
-git clone https://github.com/你的用戶名/Universal-Infra-Manager-2025-Daniel.git
-cd Universal-Infra-Manager-2025-Daniel
-```
+📦 安裝與部署
 
-### 2. 設置 `.env.local`
+1. 克隆此存放庫：
 
-```bash
-CF_ACCOUNT_ID=你的-Cloudflare-Account-ID
-CF_API_TOKEN=你的-Cloudflare-API-Token
-```
 
-### 3. 安裝依賴
 
-```bash
-npm install
-```
+git clone https://github.com/你的帳號/Cloudflared-web.git
+cd Cloudflared-web
 
-### 4. 手動部署測試
+2. 修改程式碼：
 
-```bash
-npm run deploy
-```
 
-如有成功，會顯示 URL：
 
-```
-https://workerdan.haveanewlife.workers.dev
-```
+編輯 index.js 增加功能或修改路由
 
-### 5. GitHub Secrets 設置
 
-GitHub Repository > Settings > Secrets and variables > Actions
+3. 推送變更：
 
-新增 2 個 Secrets：
 
-- `CF_ACCOUNT_ID` : Cloudflare Account ID
-- `CF_API_TOKEN` : Cloudflare API Token
 
-### 6. Push 代碼，觸發自動部署
-
-```bash
 git add .
-git commit -m "Init Universal-Infra-Manager-2025-Daniel project"
+git commit -m "feat: update routes and readme"
 git push origin main
-```
 
-成功後，可在 GitHub > Actions 顯示成功流程！
+4. 部署自動觸發 🎉
 
----
 
-## Cloudflared Web UI 使用說明
 
-### 1. 啟動 Docker 容器
+GitHub Actions 會自動部署到 Cloudflare Workers
 
-```bash
-docker run --network host -d -p 14333:14333 wisdomsky/cloudflared-web:latest
-```
+完成後即可訪問：https://workerdanver1.haveanewlife.workers.dev/
 
-或使用 docker-compose:
 
-```yaml
-services:
-  cloudflared:
-    image: wisdomsky/cloudflared-web:latest
-    restart: unless-stopped
-    network_mode: host
-    environment:
-      WEBUI_PORT: 14333
-```
+🛠️ TODO 計劃
 
-### 2. 打開瀏覽器
+[ ] 加入自動健康檢查回報
 
-```
-http://localhost:14333
-```
+[ ] 整合 webhook 通知（如：LINE Notify、Telegram）
 
-這裡可以設定 Cloudflare Tunnel Token，一鍵啟動或關閉 Tunnel 🎉
+[ ] 批量 API 路由與引數處理
+
+[ ] 測試自動化部署完成提示
+
+
+🤝 貢獻
+
+歡迎提出 issue 或 Pull Request，共同優化此專案！
+
+📄 授權
+
+MIT License
+
 
 ---
 
-## GitHub Actions 自動部署
+🔗 Cloudflare Worker 頁面： 前往查看
 
-- Push 到 `main` 分支時，自動觸發部署
-- 自動讀取 `.env.local` 或 GitHub Secrets
-- 部署成功後，Worker 立即生效
-
-> ✨ 全自動化流程，不再需要手動操作!
-
----
-
-## 未來擴張建議
-
-- ✨ 多服務合併 (如 HA 、 NAS 、 Media Server)
-- ✨ 自定義網域：`mingleedan.org`
-- ✨ Cloudflare Zero Trust 安全防護
-- ✨ 健康檢查與自動通知
-- ✨ Docker 自動化管理，搭配 Portainer 或 Watchtower
-- ✨ 加入 Cloudflare Tunnel 狀態監控
-
----
-
-Daniel Dai — 2025 🚀
+📝 記得： 更新完程式後，記得同步 README.md，保持專案文件清晰明瞭！
 
