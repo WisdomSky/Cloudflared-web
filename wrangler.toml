@@ -1,8 +1,11 @@
-name = 'workerdanver1'
+name = "universal-manager-2025"
+account_id = "你的 Cloudflare 帳號 ID"
 main = "index.js"
-type = "javascript"
-account_id = "4b373ad750503e164fba7edf76322413"
-workers_dev = true
 compatibility_date = "2025-04-08"
-usage_model = "bundled"
 
+[build]
+command = ""
+
+[vars]
+CF_API_TOKEN = "dummy"
+CF_ACCOUNT_ID = "dummy"
