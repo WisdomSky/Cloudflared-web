@@ -9,3 +9,10 @@ command = ""
 [vars]
 CF_API_TOKEN = "dummy"
 CF_ACCOUNT_ID = "dummy"
+
+# wrangler.toml (wrangler v3.88.0^)
+[observability.logs]
+enabled = true
+
+
+
