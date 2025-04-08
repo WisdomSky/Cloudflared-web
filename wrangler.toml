@@ -1,0 +1,10 @@
+name = "cloudflared-web"
+main = "index.js"
+type = "javascript"
+account_id = "你的 Cloudflare 帳號 ID"
+workers_dev = true
+compatibility_date = "2025-04-08"
+routes = [
+  "https://mingleedan.org/*"
+]
+usage_model = "bundled"
