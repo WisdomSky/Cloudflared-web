@@ -33,19 +33,17 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract version from Dockerfile or fallback to commit SHA
+        id: docker_tag_generator # 給這個步驟一個 ID (可選，但有助於區分)
         run: |
           VERSION=$(grep -oP '(?<=ARG CLOUDFLARED_VERSION=).*' Dockerfile || echo "2025.4.0")
           COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
-          echo "DOCKER_TAG=${VERSION}-${COMMIT_SHA}" >> $GITHUB_ENV
-          echo "Version tag: ${VERSION}-${COMMIT_SHA}"
+          FINAL_TAG="${VERSION}-${COMMIT_SHA}"
+          echo "DOCKER_TAG=${FINAL_TAG}" >> $GITHUB_ENV
+          echo "Version tag generated: ${FINAL_TAG}" # 修改了輸出訊息，更清晰
 
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+      # (可選) 新增這個除錯步驟，確認變數值
+      - name: Debug Docker Tag
+        run: echo "The Docker tag variable is: ${{ env.DOCKER_TAG }}"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -53,18 +51,22 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/armhf
           push: true
-          tags: |
-            danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
-            danieltheflukr/skyroute-enterprise:latest
-            ghcr.io/danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
-            ghcr.io/danieltheflukr/skyroute-enterprise:latest
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          tags: # 使用 YAML 列表格式，注意縮排
+            - danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
+            - danieltheflukr/skyroute-enterprise:latest
+            - ghcr.io/danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
+            - ghcr.io/danieltheflukr/skyroute-enterprise:latest
+          # 注意：下面的 cache 設定是範例，你需要根據你的需求調整或移除
+          # cache-from: type=gha # 使用 GitHub Actions cache
+          # cache-to: type=gha,mode=max # 使用 GitHub Actions cache
 
       - name: Notify build success
-        if: success()
+        # if: success() # if 是可選的，預設就是成功才執行下一步
         run: echo "✅ SkyRoute-Enterprise Docker image build & push successful!"
 
-      - name: Notify build failure
-        if: failure()
-        run: echo "❌ SkyRoute-Enterprise Docker image build & push failed!"
+      # 注意：失敗通知通常放在不同的 job 或用更複雜的邏輯，
+      # 直接放在這裡可能不會在 build 失敗時執行。
+      # 但為了完整性先保留，若要確保執行需調整 workflow 結構。
+      # - name: Notify build failure
+      #   if: failure()
+      #   run: echo "❌ SkyRoute-Enterprise Docker image build & push failed!"
