@@ -1,0 +1,72 @@
+# Cloudflared Web + Cloudflare Worker 專案流程圖（升級版）
+
+這裡是一個清晰的操作與部署流程圖，幫助你或團隊成員快速理解整個系統架構與流程 🚀
+
+---
+
+```mermaid
+flowchart TD
+
+    A[你 / 開發者] -->|Push 代碼| B[GitHub Repository]
+    B -->|觸發 Actions| C[GitHub Actions Workflow]
+    C -->|讀取 Secrets (GitHub Secrets)| D[Cloudflare API]
+    D -->|部署成功| E[Cloudflare Workers]
+
+    E -->|接收請求| F[訪問者]
+    F -->|透過網址存取| G[workers.dev 或自訂域名]
+
+    subgraph Cloudflare Tunnel 管理
+      H[Cloudflared Web UI (Docker)] -->|配置 Tunnel Token| I[Cloudflare Tunnel]
+      I -->|安全連線| J[Raspberry Pi 本地服務]
+      J --> K[Home Assistant / NAS / Media Server]
+    end
+
+    E -->|代理轉發| I
+```
+
+---
+
+## 流程解說
+
+1. ✅ 你開發完成後，push 代碼到 GitHub Repository。
+2. ✅ GitHub Actions 自動觸發，安全地讀取 GitHub Secrets 裡的帳號和 Token 資訊（已不使用 `.env.local`，強化安全性）。
+3. ✅ GitHub Actions 執行 wrangler deploy，部署到 Cloudflare Workers。
+4. ✅ 使用者（或你自己）通過 workers.dev 或自訂域名訪問 Worker，Worker 代理請求到 Cloudflare Tunnel。
+5. ✅ Cloudflared Web UI 管理 Tunnel 狀態，實現本地服務的安全暴露與管理。
+
+---
+
+## 使用中的環境變數 (僅儲存在 GitHub Secrets 中)
+
+- `CF_ACCOUNT_ID`：Cloudflare Account ID ✅
+- `CF_API_TOKEN`：Cloudflare API Token ✅
+- `TUNNEL_HOSTNAME`：你的 Tunnel 主機名（例如：mingleedan.org）✅
+
+> ⚠️ **強烈建議：僅使用 GitHub Secrets 儲存這些資訊，避免敏感資訊外洩。 `.env.local` 僅供本地開發測試，務必加進 `.gitignore`！**
+
+---
+
+## 安全檢查清單 🔒
+
+- [x] `.env.local` 已加入 `.gitignore`
+- [x] `index.js` 已讀取環境變數 (`TUNNEL_HOSTNAME`)，移除硬編碼 URL ✅
+- [x] GitHub Secrets 設置完成：`CF_ACCOUNT_ID`、`CF_API_TOKEN`、`TUNNEL_HOSTNAME`
+- [x] Push 前已進行安全性檢查，無敏感資訊洩漏 ✅
+
+---
+
+## 額外建議 ✅
+
+- 🧩 使用 Docker Compose 管理 Cloudflared Web UI，並配合 Watchtower 自動更新。
+- 🛡️ 設定 Cloudflare Zero Trust，加強安全防護層級。
+- 📊 加入健康檢查與即時通知（如 LINE、Telegram Bot），追蹤 Tunnel 及 Worker 狀態。
+
+---
+
+### 這樣你的專案就從「開發 → 部署 → 線上服務 → 管理維運」全部串聯完成 ✅
+
+如果你需要，我可以再幫你完成：
+- 🧩 維運手冊：日常操作、升級流程、Token 更新指引
+- 🧩 錯誤排查指南：部署失敗、Tunnel 失效、連線問題快速解決方案
+
+這樣無論是你自己使用，還是團隊成員維護，都可以非常安心又高效！🚀

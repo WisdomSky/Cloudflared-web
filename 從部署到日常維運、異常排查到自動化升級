@@ -1,0 +1,84 @@
+# Cloudflared Web + Cloudflare Worker 維運手冊 🚀
+
+這是針對你完整專案的維運手冊，確保未來即使交接、擴展、或遇到問題時，也能快速定位與修復。
+
+---
+
+## 📦 專案架構回顧
+
+- Cloudflare Worker ➔ 動態代理流量
+- Cloudflared Web UI (Docker) ➔ 管理 Cloudflare Tunnel
+- GitHub Actions ➔ 自動部署 Cloudflare Worker
+- GitHub Secrets ➔ 儲存敏感資訊（CF_ACCOUNT_ID / CF_API_TOKEN / TUNNEL_HOSTNAME）
+
+---
+
+## 🛠️ 日常維運
+
+### 1. 檢查 Tunnel 狀態
+- 登入 Cloudflared Web UI：`http://localhost:14333`
+- 檢查 Tunnel 是否在線，若異常可手動啟動 / 停止 Tunnel。
+
+### 2. 更新 Worker 程式
+- 修改 `index.js`
+- Push 到 `main` 分支，GitHub Actions 會自動部署。
+
+### 3. 管理 Docker
+查看容器狀態：
+```bash
+docker ps
+```
+重啟 Cloudflared Web UI：
+```bash
+docker restart cloudflared
+```
+
+### 4. 更新 Secrets（更換 Token 或帳號 ID）
+- 前往 GitHub Repository ➔ Settings ➔ Secrets ➔ Actions
+- 編輯 `CF_ACCOUNT_ID` / `CF_API_TOKEN` / `TUNNEL_HOSTNAME`
+- Push 任一 commit 觸發自動部署
+
+---
+
+## 🔍 錯誤排查指南
+
+| 問題描述 | 排查步驟 |
+|-----------|------------|
+| Worker 網站無法打開 | 1. 確認 GitHub Actions 部署是否成功<br>2. 檢查 Cloudflare Worker 設定和路由 |
+| Tunnel 離線 / 錯誤 502 | 1. 登入 Web UI 確認 Tunnel 狀態<br>2. 確認本地服務是否正常啟動 (Home Assistant / NAS) |
+| GitHub Actions 部署失敗 | 1. 檢查 Secrets 是否過期<br>2. 查看 Actions 日誌錯誤訊息 |
+| 更新後未生效 | 1. 確認是否有觸發部署流程<br>2. 強制刷新瀏覽器 Cache |
+
+---
+
+## 🔄 自動化建議（進階）
+
+- ✅ **Watchtower**：自動更新 Docker 容器
+- ✅ **Webhook + GitHub Actions**：自動通知部署成功或失敗
+- ✅ **UptimeRobot / Healthchecks.io**：監控服務健康狀態並即時通知
+
+---
+
+## 📋 維運小抄
+
+| 指令 | 說明 |
+|------|------|
+| `npm run deploy` | 手動部署 Worker |
+| `docker restart cloudflared` | 重啟 Cloudflared Web UI 容器 |
+| `docker logs cloudflared` | 查看 Cloudflared 運行日誌 |
+| `git push origin main` | 推送代碼並自動部署 |
+
+---
+
+## ✅ 維運檢查清單
+
+- [ ] GitHub Secrets 定期更新？
+- [ ] Docker 容器正常運行？
+- [ ] Tunnel 維持在線？
+- [ ] Worker URL 正常存取？
+- [ ] 自動化流程定期檢查？
+
+---
+
+
+

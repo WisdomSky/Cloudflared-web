@@ -1,0 +1,29 @@
+name: SkyRoute-Enterprise - Daily Auto Redeploy
+
+on:
+  schedule:
+    - cron: '0 3 * * *' # 每天台北時間上午 11:00 自動執行（UTC +8 時區）
+  workflow_dispatch: # 手動觸發（可選）
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Wrangler CLI
+        run: npm install -g wrangler
+
+      - name: Redeploy to Cloudflare Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: wrangler deploy
+
+      - name: Notify Success
+        run: echo "✅ Daily Cloudflare Worker redeploy success!"
