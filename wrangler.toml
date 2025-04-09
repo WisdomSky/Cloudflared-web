@@ -1,4 +1,4 @@
-name = "skyroute-enterprise"
+name = 'skyroute-enterprise'
 account_id = "4b373ad750503e164fba7edf76322413"
 main = "index.js"
 compatibility_date = "2025-04-08"
