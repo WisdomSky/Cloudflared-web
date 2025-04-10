@@ -29,10 +29,15 @@ jobs:
       - name: Extract version from Dockerfile or fallback to commit SHA
         run: |
           VERSION=$(grep -oP '(?<=ARG CLOUDFLARED_VERSION=).*' Dockerfile || echo "2025.4.0")
-          COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
-          FINAL_TAG="${VERSION}-${COMMIT_SHA}"
-          echo "DOCKER_TAG=${FINAL_TAG}" >> $GITHUB_ENV
-          echo "🔥 Docker tag generated: ${FINAL_TAG}"
+          if [ -z "$VERSION" ]; then
+      VERSION="2025.4.0" # ✅ 自訂預設版本號
+    fi
+
+    COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+    FINAL_TAG="${VERSION}-${COMMIT_SHA}"
+
+    echo "DOCKER_TAG=${FINAL_TAG}" >> $GITHUB_ENV
+    echo "🔥 Docker tag generated: ${FINAL_TAG}"
 
       - name: Build and push Docker image to GHCR
         uses: docker/build-push-action@v5
