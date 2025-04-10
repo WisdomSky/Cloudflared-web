@@ -35,7 +35,8 @@ jobs:
           DATE_TAG=$(date +'%Y%m%d')
           COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
           FINAL_TAG="${VERSION}-${DATE_TAG}-${COMMIT_SHA}"
-
+          FINAL_TAG=$(echo $FINAL_TAG | tr -d '\n') # Remove any newline characters
+          FINAL_TAG=$(echo $FINAL_TAG | sed 's/[^a-zA-Z0-9._-]//g') # Remove invalid characters
           echo "DOCKER_TAG=${FINAL_TAG}" >> $GITHUB_ENV
           echo "🔥 Docker tag generated: ${FINAL_TAG}"
 
@@ -50,4 +51,4 @@ jobs:
             ghcr.io/danieltheflukr/skyroute-enterprise:latest
 
       - name: Notify build success
-        run: echo "✅ SkyRoute-Enterprise image pushed to GHCR successfully!"
+        run: echo "✅ SkyRoute-Enterprise image pushed to GHCR!"
