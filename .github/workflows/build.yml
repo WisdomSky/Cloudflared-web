@@ -26,11 +26,15 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract version from Dockerfile or fallback to commit SHA
+      - name: Generate version tag
         run: |
           VERSION=$(grep -oP '(?<=ARG CLOUDFLARED_VERSION=).*' Dockerfile || echo "2025.4.0")
+          if [ -z "$VERSION" ]; then
+            VERSION="2025.4.0"
+          fi
+          DATE_TAG=$(date +'%Y%m%d')
           COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
-          FINAL_TAG="${VERSION}-${COMMIT_SHA}"
+          FINAL_TAG="${VERSION}-${DATE_TAG}-${COMMIT_SHA}"
           FINAL_TAG=$(echo $FINAL_TAG | tr -d '\n') # Remove any newline characters
           FINAL_TAG=$(echo $FINAL_TAG | sed 's/[^a-zA-Z0-9._-]//g') # Remove invalid characters
           echo "DOCKER_TAG=${FINAL_TAG}" >> $GITHUB_ENV

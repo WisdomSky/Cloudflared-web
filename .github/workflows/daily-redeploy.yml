@@ -1,13 +1,14 @@
-name: SkyRoute-Enterprise - Daily Auto Redeploy
+name: SkyRoute-Enterprise - Daily Auto Deploy (Cloudflare Worker)
 
 on:
   schedule:
-    - cron: '0 3 * * *' # 每天台北時間上午 11:00 自動執行（UTC +8 時區）
+    - cron: '0 3 * * *' # 每天台北時間上午 11:00（UTC +8）
   workflow_dispatch: # 手動觸發（可選）
 
 jobs:
-  redeploy:
+  worker-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
@@ -27,3 +28,7 @@ jobs:
 
       - name: Notify Success
         run: echo "✅ Daily Cloudflare Worker redeploy success!"
+
+      - name: Notify Failure
+        if: failure()
+        run: echo "❌ Cloudflare Worker redeploy failed!"
