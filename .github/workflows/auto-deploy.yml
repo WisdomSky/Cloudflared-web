@@ -32,35 +32,28 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract version from Dockerfile or fallback to commit SHA
-        id: docker_tag_generator
+      - name: Generate version tag
         run: |
           VERSION=$(grep -oP '(?<=ARG CLOUDFLARED_VERSION=).*' Dockerfile || echo "2025.4.0")
+          DATE_TAG=$(date +'%Y%m%d')
           COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
-          FINAL_TAG="${VERSION}-${COMMIT_SHA}"
+          FINAL_TAG="${VERSION}-${DATE_TAG}-${COMMIT_SHA}"
+
           echo "DOCKER_TAG=${FINAL_TAG}" >> $GITHUB_ENV
-          echo "Version tag generated: ${FINAL_TAG}"
+          echo "🔥 Docker tag generated: ${FINAL_TAG}"
 
-      - name: Debug Docker Tag
-        run: echo "The Docker tag variable is: ${{ env.DOCKER_TAG }}"
-
-      - name: Build and push Docker image
+      - name: Build and push Docker image to GHCR
         uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64,linux/arm64,linux/armhf
           push: true
           tags: |
-            danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
-            danieltheflukr/skyroute-enterprise:latest
             ghcr.io/danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
             ghcr.io/danieltheflukr/skyroute-enterprise:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
-      - name: Notify Docker build success
-        if: success()
-        run: echo "✅ SkyRoute-Enterprise Docker image build & push successful!"
+      - name: Notify build success
+        run: echo "✅ SkyRoute-Enterprise image pushed to GHCR successfully!"
 
   worker:
     runs-on: ubuntu-latest
