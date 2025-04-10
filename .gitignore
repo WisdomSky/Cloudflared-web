@@ -7,3 +7,5 @@ app/frontend/dist
 dev/config
 dev/.cloudflared
 .idea
+.env.local
+
