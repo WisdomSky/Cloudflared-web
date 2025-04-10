@@ -26,13 +26,12 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract version from Dockerfile or fallback to commit SHA
+      - name: Generate version tag
         run: |
           VERSION=$(grep -oP '(?<=ARG CLOUDFLARED_VERSION=).*' Dockerfile || echo "2025.4.0")
           if [ -z "$VERSION" ]; then
             VERSION="2025.4.0"
           fi
-
           DATE_TAG=$(date +'%Y%m%d')
           COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
           FINAL_TAG="${VERSION}-${DATE_TAG}-${COMMIT_SHA}"
@@ -51,4 +50,4 @@ jobs:
             ghcr.io/danieltheflukr/skyroute-enterprise:latest
 
       - name: Notify build success
-        run: echo "✅ SkyRoute-Enterprise image pushed to GHCR!"
+        run: echo "✅ SkyRoute-Enterprise image pushed to GHCR successfully!"
