@@ -51,6 +51,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64,linux/armhf
           push: true
+<<<<<<< Updated upstream
           tags: # 使用 YAML 列表格式，注意縮排
             - danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
             - danieltheflukr/skyroute-enterprise:latest
@@ -59,10 +60,18 @@ jobs:
           # 注意：下面的 cache 設定是範例，你需要根據你的需求調整或移除
           # cache-from: type=gha # 使用 GitHub Actions cache
           # cache-to: type=gha,mode=max # 使用 GitHub Actions cache
+=======
+          tags: |
+            danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
+            danieltheflukr/skyroute-enterprise:latest
+            ghcr.io/danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
+            ghcr.io/danieltheflukr/skyroute-enterprise:latest
+>>>>>>> Stashed changes
 
       - name: Notify build success
         # if: success() # if 是可選的，預設就是成功才執行下一步
         run: echo "✅ SkyRoute-Enterprise Docker image build & push successful!"
+<<<<<<< Updated upstream
 
       # 注意：失敗通知通常放在不同的 job 或用更複雜的邏輯，
       # 直接放在這裡可能不會在 build 失敗時執行。
@@ -70,3 +79,5 @@ jobs:
       # - name: Notify build failure
       #   if: failure()
       #   run: echo "❌ SkyRoute-Enterprise Docker image build & push failed!"
+=======
+>>>>>>> Stashed changes
