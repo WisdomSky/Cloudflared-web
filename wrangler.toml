@@ -7,7 +7,7 @@ compatibility_date = "2025-04-08"
 command = ""
 
 [vars]
-CF_API_TOKEN = "abc123xyz456你的API Token"
+CF_API_TOKEN = "6y1UyXmJN98BFSvnzmxGKkp-7UsC8kJcCc9lXhwo"
 CF_ACCOUNT_ID = "4b373ad750503e164fba7edf76322413"
 PROXY_AUTH_TOKEN = "k4f8ad9fg4k8j3fa87f9"
 
