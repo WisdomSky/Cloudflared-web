@@ -16,4 +16,4 @@ PROXY_AUTH_TOKEN = "k4f8ad9fg4k8j3fa87f9"
 enabled = true
 
 routes = [
-  "home.mingleedan.org/*
+  "home.mingleedan.org/*"
