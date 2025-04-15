@@ -3,6 +3,37 @@ export default {
     const url = new URL(request.url);
 
     // 🎯 特定路徑處理
+        if (hostname === 'home.mingleedan.org') {
+      const tunnelUrl = env.TUNNEL_HOME_URL; // 從環境變數讀取 Tunnel URL
+
+      if (!tunnelUrl) {
+        // 如果沒有設定 Tunnel URL，回傳錯誤
+        return new Response('Backend tunnel URL not configured for home.mingleedan.org', { status: 503 });
+      }
+
+      // 建立要轉發到的完整 URL (Tunnel URL + 原始路徑和查詢參數)
+      const targetUrl = tunnelUrl + url.pathname + url.search;
+
+      console.log(`Forwarding request for ${hostname} to ${targetUrl}`);
+
+      // 使用 fetch 將原始請求轉發到 Tunnel
+      // Cloudflare 會在內部處理到 .cfargotunnel.com 的路由
+      // 直接傳遞原始 request 物件可以保留大部分的 headers, method, body 等
+      try {
+        return await fetch(targetUrl, request);
+      } catch (error) {
+        console.error(`Error forwarding request to tunnel: ${error}`);
+        return new Response('Failed to connect to backend service', { status: 502 });
+      }
+
+    } else if (hostname === 'admin.mingleedan.org') {
+      // ... admin 邏輯 ...
+      return new Response('Admin route');
+    } else {
+      return new Response('Not Found', { status: 404 });
+    }
+  }
+};
     if (url.pathname === "/") {
       return new Response("✅ Cloudflare Worker 正常運作！\n歡迎使用 workerdanver1.haveanewlife.workers.dev", {
         status: 200,
