@@ -14,3 +14,6 @@ PROXY_AUTH_TOKEN = "k4f8ad9fg4k8j3fa87f9"
 
 [observability.logs]
 enabled = true
+
+routes = [
+  "home.mingleedan.org/*
