@@ -7,7 +7,6 @@
 ✅ GitHub Actions 自動部署
 ✅ 基礎路由處理（含主頁 / 路由）
 ✅ Cloudflare 全球邊緣網路部署
-✅ Docker 多平台映像，GHCR 自動推送
 
 ## 功能介紹
 

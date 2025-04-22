@@ -32,7 +32,7 @@ export default {
     } else {
       return new Response('Not Found', { status: 404 });
     }
-  }
+  },
 };
     if (url.pathname === "/") {
       return new Response("✅ Cloudflare Worker 正常運作！\n歡迎使用 workerdanver1.haveanewlife.workers.dev", {
@@ -99,7 +99,7 @@ export default {
   },
 };
 
-// ✅ Cron handler：每 30 分鐘觸發一次，可自訂邏輯
+ // ✅ Cron handler：每 30 分鐘觸發一次，可自訂邏輯
 export const scheduled = async (event, env, ctx) => {
   console.log("⏰ Cron job triggered at", new Date().toISOString());
 
