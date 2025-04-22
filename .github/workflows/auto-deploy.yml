@@ -1,6 +1,9 @@
 name: SkyRoute-Enterprise - Auto Deploy (GHCR Only 🚀)
 
 on:
+  permissions:
+  contents: read
+  packages: write
   push:
     branches:
       - "main"
