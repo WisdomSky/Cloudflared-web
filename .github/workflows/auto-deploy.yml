@@ -53,7 +53,7 @@ jobs:
 
       # (可選) 除錯步驟，印出 Tag
       - name: Debug Docker Tag
-        run: echo "The Docker tag variable is: ${{ env.DOCKER_TAG }}"
+        run: echo "The Docker tag variable is: $DOCKER_TAG"
       # 步驟 6：建置並推送到 GHCR (包含快取)
       - name: Build and push Docker image to GHCR
         uses: docker/build-push-action@v5
