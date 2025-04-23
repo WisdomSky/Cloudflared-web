@@ -64,11 +64,7 @@ jobs:
           # 在 Log 中印出產生的標籤
           echo "🔥 Docker tag generated: ${FINAL_TAG}"
 
-      # (可選) 除錯步驟，確認變數值
-      - name: Debug Docker Tag
-        # --- 已修正：刪除了行尾多餘的文字 ---
-        run: echo "The Docker tag variable is: $DOCKER_TAG"
-
+      
       # 步驟 6：建置並推送到 GHCR (包含快取)
       - name: Build and push Docker image to GHCR
         uses: docker/build-push-action@v5
