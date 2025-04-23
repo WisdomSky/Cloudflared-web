@@ -1,4 +1,4 @@
-name: SkyRoute-Enterprise - Build and Push Docker Image
+name: SkyRoute-Enterprise - Build and Push to GHCR Only
 
 on:
   push:
@@ -19,40 +19,53 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }} # 確保 Repo Settings > Secrets and variables > Actions 中有 GITHUB_TOKEN (通常預設就有權限)
 
       - name: Generate version tag
+        id: docker_tag_generator # 給步驟一個 ID (可選)
         run: |
+          # 嘗試從 Dockerfile 取得版本，若無則用預設值
           VERSION=$(grep -oP '(?<=ARG CLOUDFLARED_VERSION=).*' Dockerfile || echo "2025.4.0")
+          # 再次確認 VERSION 不是空的
+          if [ -z "$VERSION" ]; then
+            VERSION="2025.4.0"
+          fi
+          # 取得日期標籤 YYYYMMDD
           DATE_TAG=$(date +'%Y%m%d')
+          # 取得短 Commit SHA
           COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+          # 組成最終標籤，格式：版本-日期-SHA
           FINAL_TAG="${VERSION}-${DATE_TAG}-${COMMIT_SHA}"
-          FINAL_TAG=$(echo $FINAL_TAG | tr -d '\n' | sed 's/[^a-zA-Z0-9._-]//g')
+          # 清理標籤中的換行符 (保險起見)
+          FINAL_TAG=$(echo $FINAL_TAG | tr -d '\n')
+          # 清理標籤中除了字母、數字、點、底線、減號以外的字元 (保險起見)
+          FINAL_TAG=$(echo $FINAL_TAG | sed 's/[^a-zA-Z0-9._-]//g')
+          # 設定環境變數 DOCKER_TAG 供後續步驟使用
           echo "DOCKER_TAG=${FINAL_TAG}" >> $GITHUB_ENV
+          # 在 Log 中印出產生的標籤
           echo "🔥 Docker tag generated: ${FINAL_TAG}"
 
-      - name: Build and push Docker image to Docker Hub & GHCR
+      # (可選) 除錯步驟，確認變數值
+      - name: Debug Docker Tag
+        run: echo "The Docker tag variable is: ${{ env.DOCKER_TAG }}"
+
+      - name: Build and push Docker image to GHCR
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64,linux/arm64,linux/armhf
-          push: true
-          tags: |
-            danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
-            danieltheflukr/skyroute-enterprise:latest
+          platforms: linux/amd64,linux/arm64,linux/armhf # 建置多平台映像檔
+          push: true # 推送到 Registry
+          tags: | # 使用多行字串列出所有標籤
             ghcr.io/danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
             ghcr.io/danieltheflukr/skyroute-enterprise:latest
+          # 新增快取設定，利用 GitHub Actions Cache 加速後續建置
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Notify build success
-        run: echo "✅ SkyRoute-Enterprise Docker image build & push successful!"
+        run: echo "✅ SkyRoute-Enterprise image pushed to GHCR!"
