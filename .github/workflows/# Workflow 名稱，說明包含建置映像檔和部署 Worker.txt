@@ -5,9 +5,6 @@ on:
   push:
     branches:
       - "main" # 只在 main 分支被推送時觸發
-  pull_request:
-    branches:
-      - main
 
 # 設定 workflow 需要的權限
 permissions:
@@ -119,7 +116,14 @@ jobs:
         if: failure()
         run: echo "❌ SkyRoute-Enterprise Cloudflare Worker deploy failed!"
 
+name: Auto Deploy
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
@@ -142,3 +146,6 @@ jobs:
         env:
           CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: npm run deploy
+
+Add the secret to your GitHub repository via the GitHub CLI:
+ gh secret set CLOUDFLARE_API_TOKEN --body "062c53428601f8ab2705112908f2004142d5c"
