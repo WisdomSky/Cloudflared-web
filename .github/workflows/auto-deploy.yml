@@ -119,7 +119,6 @@ jobs:
         if: failure()
         run: echo "❌ SkyRoute-Enterprise Cloudflare Worker deploy failed!"
 
-
   build-and-deploy:
     runs-on: ubuntu-latest
 
@@ -137,6 +136,10 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+      - name: Test CF_API_TOKEN Secret
+        run: echo "CF_API_TOKEN is set"
+        if: ${{ secrets.CF_API_TOKEN != '' }}
 
       - name: Deploy
         env:
