@@ -103,7 +103,7 @@ jobs:
       - name: Publish to Cloudflare Worker
         env:
           # --- 確保這個 Secret 已經在 GitHub Repo 設定中建立 ---
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           # --- 你的 wrangler.toml 可能還需要 CF_ACCOUNT_ID ---
           # CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }} # 如果需要，取消註解並設定 Secret
         # 使用 npx 執行專案安裝的 wrangler，更可靠
