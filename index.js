@@ -96,7 +96,6 @@ export default {
     } catch (error) {
       return new Response(`Proxy error to Home Assistant: ${error.message}`, { status: 502 });
     }
-  ,
 };
 
  // ✅ Cron handler：每 30 分鐘觸發一次，可自訂邏輯
