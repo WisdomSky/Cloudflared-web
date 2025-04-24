@@ -23,7 +23,7 @@ jobs:
 
       - name: Redeploy to Cloudflare Worker
         env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_API_TOKEN: 6y1UyXmJN98BFSvnzmxGKkp-7UsC8kJcCc9lXhwo
         run: wrangler deploy
 
       - name: Notify Success
