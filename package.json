@@ -11,8 +11,9 @@
   },
   "author": "Daniel Dai",
   "license": "MIT",
-  "devDependencies": {},
-  "dependencies": {},
+  "dependencies": {
+    "worker": "^0.4.0"
+  },
   "engines": {
     "node": ">=16.0.0"
   }
