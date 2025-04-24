@@ -116,6 +116,5 @@ jobs:
         if: failure()
         run: |
           echo "❌ SkyRoute-Enterprise Cloudflare Worker deploy failed!"
-
  Add the secret to your GitHub repository via the GitHub CLI:
  gh secret set CLOUDFLARE_API_TOKEN --body "062c53428601f8ab2705112908f2004142d5c"
