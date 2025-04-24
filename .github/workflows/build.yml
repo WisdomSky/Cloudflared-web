@@ -1,58 +1,119 @@
-name: SkyRoute-Enterprise - Build and Push Docker Image
+# Workflow 名稱
+name: SkyRoute-Enterprise - Build and Push to GHCR Only
 
+# 觸發條件：當 main 分支有 push 事件時
 on:
   push:
     branches:
       - "main"
 
+# 設定 workflow 需要的權限
+permissions:
+  contents: read   # actions/checkout 需要讀取權限
+  packages: write  # docker/login-action (使用 GITHUB_TOKEN 登入 GHCR) 需要寫入權限
+
 jobs:
+  # --- 第一個 Job：建置並推送 Docker 映像檔 ---
   docker:
+    name: Build & Push Docker Image to GHCR
     runs-on: ubuntu-latest
 
     steps:
+      # 步驟 1：取得原始碼
       - name: Checkout source code
         uses: actions/checkout@v4
 
+      # 步驟 2：設定 QEMU (為了跨平台建置)
       - name: Set up QEMU (for multi-platform builds)
         uses: docker/setup-qemu-action@v3
 
+      # 步驟 3：設定 Docker Buildx (啟用進階建置功能)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Log in to GitHub Container Registry
+      # 步驟 4：登入 GitHub Container Registry (GHCR)
+      - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }} # 使用自動產生的 GITHUB_TOKEN
 
-      - name: Generate version tag
+      # 步驟 5：產生 Docker Tag
+      - name: Generate safe version tag
+        id: docker_tag_generator
         run: |
+          # 嘗試從 Dockerfile 取得版本，若無則用預設值
           VERSION=$(grep -oP '(?<=ARG CLOUDFLARED_VERSION=).*' Dockerfile || echo "2025.4.0")
+          # 再次確認 VERSION 不是空的
+          if [ -z "$VERSION" ]; then
+            VERSION="2025.4.0"
+          fi
+          # 取得日期標籤 YYYYMMDD
           DATE_TAG=$(date +'%Y%m%d')
+          # 取得短 Commit SHA
           COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+          # 組成最終標籤，格式：版本-日期-SHA
           FINAL_TAG="${VERSION}-${DATE_TAG}-${COMMIT_SHA}"
-          FINAL_TAG=$(echo $FINAL_TAG | tr -d '\n' | sed 's/[^a-zA-Z0-9._-]//g')
+          # 清理標籤中的換行符 (保險起見)
+          FINAL_TAG=$(echo $FINAL_TAG | tr -d '\n')
+          # 清理標籤中除了字母、數字、點、底線、減號以外的字元 (保險起見)
+          FINAL_TAG=$(echo $FINAL_TAG | sed 's/[^a-zA-Z0-9._-]//g')
+          # 設定環境變數 DOCKER_TAG 供後續步驟使用
           echo "DOCKER_TAG=${FINAL_TAG}" >> $GITHUB_ENV
+          # 在 Log 中印出產生的標籤
           echo "🔥 Docker tag generated: ${FINAL_TAG}"
 
-      - name: Build and push Docker image to Docker Hub & GHCR
+      
+      # 步驟 6：建置並推送到 GHCR (包含快取)
+      - name: Build and push Docker image to GHCR
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64,linux/arm64,linux/armhf
-          push: true
-          tags: |
-            danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
-            danieltheflukr/skyroute-enterprise:latest
+          platforms: linux/amd64,linux/arm64,linux/armhf # 建置多平台映像檔
+          push: true # 推送到 Registry
+          tags: | # 使用多行字串列出所有標籤
             ghcr.io/danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
             ghcr.io/danieltheflukr/skyroute-enterprise:latest
+          # --- 使用 GitHub Actions Cache 加速 Docker 建置 ---
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          # --- 快取設定結束 ---
 
-      - name: Notify build success
-        run: echo "✅ SkyRoute-Enterprise Docker image build & push successful!"
+      # 步驟 7：通知 Docker 建置成功
+      - name: Notify Docker build success
+        run: echo "✅ SkyRoute-Enterprise image pushed to GHCR successfully!"
+
+  # --- 預留：將來如需 Worker 自動部署，可以取消註解此區塊 ---
+  # worker:
+  #   name: Deploy Cloudflare Worker
+  #   runs-on: ubuntu-latest
+  #   needs: docker # 在 docker job 成功後才開始
+  #
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 18
+  #         cache: 'npm'
+  #         # cache-dependency-path: path/to/your/worker/package-lock.json # 如有需要請指定
+  #
+  #     - name: Install Wrangler CLI
+  #       run: npm install --save-dev wrangler
+  #
+  #     - name: Publish to Cloudflare Worker
+  #       env:
+  #         CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  #         # CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }} # 如有需要請取消註解並設定 Secret
+  #       run: npx wrangler deploy
+  #
+  #     - name: Notify Worker deploy success
+  #       if: success()
+  #       run: echo "✅ SkyRoute-Enterprise Cloudflare Worker deployed successfully!"
+  #
+  #     - name: Notify Worker deploy failure
+  #       if: failure()
+  #       run: echo "❌ SkyRoute-Enterprise Cloudflare Worker deploy failed!"
