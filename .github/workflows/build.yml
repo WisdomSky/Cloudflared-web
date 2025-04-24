@@ -68,6 +68,8 @@ jobs:
       # 步驟 6：建置並推送到 GHCR (包含快取)
       - name: Build and push Docker image to GHCR
         uses: docker/build-push-action@v5
+        env:
+          DOCKER_TAG: ${{ env.DOCKER_TAG }}
         with:
           context: .
           platforms: linux/amd64,linux/arm64,linux/armhf # 建置多平台映像檔

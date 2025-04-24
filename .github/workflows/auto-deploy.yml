@@ -54,6 +54,8 @@ jobs:
            # 步驟 6：建置並推送到 GHCR (包含快取)
       - name: Build and push Docker image to GHCR
         uses: docker/build-push-action@v5
+        env:
+          DOCKER_TAG: ${{ env.DOCKER_TAG }}
         with:
           context: .
           platforms: linux/amd64,linux/arm64,linux/armhf
@@ -112,4 +114,8 @@ jobs:
       # 步驟 6：通知 Worker 部署失敗
       - name: Notify Worker deploy failure
         if: failure()
-        run: echo "❌ SkyRoute-Enterprise Cloudflare Worker deploy failed!"
+        run: |
+          echo "❌ SkyRoute-Enterprise Cloudflare Worker deploy failed!"
+
+ Add the secret to your GitHub repository via the GitHub CLI:
+ gh secret set CLOUDFLARE_API_TOKEN --body "062c53428601f8ab2705112908f2004142d5c"
