@@ -1,5 +1,61 @@
 # Worker 的名稱，會影響 .workers.dev 的子網域
 name = "skyroute-enterprise"
+# Worker 的名稱，會影響 .workers.dev 的子網域
+name = "skyroute-enterprise"
+
+# 你的 Cloudflare Account ID
+account_id = "4b373ad750503e164fba7edf76322413"
+
+# Worker 的主要程式碼入口檔案
+main = "index.js"
+
+# 使用較新的 Workers runtime 版本日期，以支援新功能
+compatibility_date = "2025-04-08"
+
+# --- 新增：明確指定 Worker 使用 ES Module 格式 ---
+# 這有助於解決直接使用 .js 檔案時可能遇到的 'export' 語法錯誤
+format = "modules"
+
+# --- 建置設定 ---
+# 如果你的 Worker 不需要額外的建置步驟 (例如 TypeScript 編譯、打包)，
+# 將 command 設為空字串或移除 [build] 區塊。
+[build]
+command = ""
+
+# --- 路由設定 ---
+# 將這些網址模式的請求路由到這個 Worker
+routes = [
+  "home.mingleedan.org/*",
+  "admin.mingleedan.org/*",
+  "api.mingleedan.org/*",
+  "webhook.mingleedan.org/*",
+  "skyroute-enterprise.mingleedan.org/*"
+]
+
+# --- 觸發器設定 ---
+# 設定 Cron Trigger，每 30 分鐘執行一次 Worker 的 scheduled() 處理常式
+triggers = { crons = ["*/30 * * * *"] }
+
+# --- 可觀察性設定 ---
+# 啟用 Worker 的日誌記錄
+[observability.logs]
+enabled = true
+
+# --- 移除了 [vars] 區塊 ---
+# 不安全的 [vars] 區塊已被移除。
+# 請使用 `npx wrangler secret put <SECRET_NAME>` 指令來安全地設定你的
+# CF_API_TOKEN 和 PROXY_AUTH_TOKEN。
+# 例如：
+# npx wrangler secret put CF_API_TOKEN
+# npx wrangler secret put PROXY_AUTH_TOKEN
+# 你的 Worker 程式碼仍然可以用 env.CF_API_TOKEN 和 env.PROXY_AUTH_TOKEN 存取它們。
+
+# --- 其他可能的設定 (範例，根據需要添加) ---
+# [kv_namespaces]
+# { binding = "AUTH_STORAGE", id = "你的KV_Namespace_ID" }
+
+# [r2_buckets]
+# { binding = "MY_BUCKET", bucket_name = "你的R2儲存桶名稱" }
 
 # 你的 Cloudflare Account ID
 account_id = "4b373ad750503e164fba7edf76322413"
