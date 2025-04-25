@@ -1,6 +1,7 @@
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    const hostname = url.hostname;
 
     // 🎯 特定路徑處理
         if (hostname === 'home.mingleedan.org') {
@@ -32,6 +33,7 @@ export default {
     } else {
       return new Response('Not Found', { status: 404 });
     }
+  
   },
 };
     if (url.pathname === "/") {
@@ -60,13 +62,13 @@ export default {
     }
 
     // 🎯 預設行為：反向代理至 Home Assistant
-    const targetHost2 = "mingleedan.org"; // 或 Cloudflare Tunnel 對外網址
-    const targetPort2 = "8123";
-    const targetUrl2 = new URL(request.url);
-    targetUrl2.hostname = targetHost2;
-    targetUrl2.port = targetPort2;
+    const targetHost = "mingleedan.org"; // 或 Cloudflare Tunnel 對外網址
+    const targetPort = "8123";
+    const targetUrl = new URL(request.url);
+    targetUrl.hostname = targetHost;
+    targetUrl.port = targetPort;
 
-    const modifiedRequest2 = new Request(targetUrl2.toString(), {
+    const modifiedRequest = new Request(targetUrl.toString(), {
       method: request.method,
       headers: request.headers,
       body: request.method !== "GET" && request.method !== "HEAD" ? request.body : null,
@@ -94,42 +96,17 @@ export default {
       });
 
     } catch (error) {
-      return new Response(`Proxy error to Home Assistant: ${error.message}`, { status: 502 });
-    }
-
-    // 🎯 預設行為：反向代理至 Home Assistant
-    const targetHost = "mingleedan.org"; // 或 Cloudflare Tunnel 對外網址
-    const targetPort = "8123";
-    const targetUrl = new URL(request.url);
-    targetUrl.hostname = targetHost;
-    targetUrl.port = targetPort;
-
-    const modifiedRequest = new Request(targetUrl.toString(), {
-      method: request.method,
-// Removed YAML block for deployment configuration. Ensure it is placed in the appropriate workflow file.
-
-      // 加入 CORS 與安全性標頭（依需求調整）
-      newHeaders.set("X-Frame-Options", "DENY"),
-      newHeaders.set("Access-Control-Allow-Origin", "*");
-      newHeaders.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-      newHeaders.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-      if (request.method === "OPTIONS") {
-        return new Response(null, { status: 204, headers: newHeaders });
+          return new Response(`Proxy error to Home Assistant: ${error.message}`, { status: 502 });
+        }
       }
 
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: newHeaders,
-      });
-
-        } catch (error) {
-      return new Response(`Proxy error to Home Assistant: ${error.message}`, { status: 502 });
-        }
-
  // ✅ Cron handler：每 30 分鐘觸發一次，可自訂邏輯
-export const scheduled = newFunction();
+export const scheduled = async (event, env, ctx) => {
+  console.log("⏰ Cron job triggered at", new Date().toISOString());
+
+  // 範例：打一下 API 或執行健康檢查
+  // await fetch("https://home.mingleedan.org/healthcheck");
+};
 
 jobs:
   deploy:
@@ -139,10 +116,11 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: npx wrangler deploy
-function newFunction() {
-  return async (_event) => {
-    console.log("⏰ Cron job triggered at", new Date().toISOString());
 
-  };
+function example() {
+  console.log("This is a valid block.");
 }
 
+function sayHello() {
+  console.log("Hello, world!");
+}
