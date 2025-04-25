@@ -62,6 +62,7 @@ export default {
     }
 
     // 🎯 預設行為：反向代理至 Home Assistant
+    
     const targetHost = "mingleedan.org"; // 或 Cloudflare Tunnel 對外網址
     const targetPort = "8123";
     const targetUrl = new URL(request.url);
@@ -98,29 +99,22 @@ export default {
     } catch (error) {
           return new Response(`Proxy error to Home Assistant: ${error.message}`, { status: 502 });
         }
-      }
+  },
 
  // ✅ Cron handler：每 30 分鐘觸發一次，可自訂邏輯
-export const scheduled = async (event, env, ctx) => {
-  console.log("⏰ Cron job triggered at", new Date().toISOString());
+  async scheduled(event, env, ctx) {
+    console.log("⏰ Cron job triggered at", new Date().toISOString());
 
-  // 範例：打一下 API 或執行健康檢查
-  // await fetch("https://home.mingleedan.org/healthcheck");
+    // 範例：打一下 API 或執行健康檢查
+    // await fetch("https://home.mingleedan.org/healthcheck");
+  },
+
+  jobs:
+    deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Deploy to Cloudflare
+          env:
+            CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          run: npx wrangler deploy
 };
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to Cloudflare
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: npx wrangler deploy
-
-function example() {
-  console.log("This is a valid block.");
-}
-
-function sayHello() {
-  console.log("Hello, world!");
-}
