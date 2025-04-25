@@ -74,7 +74,7 @@ export default {
     });
 
     try {
-      const response = await fetch(modifiedRequest);
+      const response = await fetch(modifiedRequest2);
       const newHeaders = new Headers(response.headers);
 
       // 加入 CORS 與安全性標頭（依需求調整）
@@ -104,29 +104,37 @@ export default {
     targetUrl.hostname = targetHost;
     targetUrl.port = targetPort;
 
-    const modifiedRequest = new Request(targetUrl.toString(), {
-      method: request.method,
-// Removed YAML block for deployment configuration. Ensure it is placed in the appropriate workflow file.
+const newHeaders = new Headers(request.headers);
 
-      // 加入 CORS 與安全性標頭（依需求調整）
-      newHeaders.set("X-Frame-Options", "DENY"),
-      newHeaders.set("Access-Control-Allow-Origin", "*");
-      newHeaders.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-      newHeaders.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+// 加入 CORS 與安全性標頭（依需求調整）
+newHeaders.set("X-Frame-Options", "DENY");
+newHeaders.set("Access-Control-Allow-Origin", "*");
+newHeaders.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+newHeaders.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-      if (request.method === "OPTIONS") {
-        return new Response(null, { status: 204, headers: newHeaders });
-      }
+if (request.method === "OPTIONS") {
+  return new Response(null, { status: 204, headers: newHeaders });
+}
 
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: newHeaders,
-      });
+const modifiedRequest = new Request(targetUrl.toString(), {
+  method: request.method,
+  headers: newHeaders,
+  body: request.method !== "GET" && request.method !== "HEAD" ? request.body : null,
+  redirect: "follow",
+});
 
-        } catch (error) {
-      return new Response(`Proxy error to Home Assistant: ${error.message}`, { status: 502 });
-        }
+try {
+  const response = await fetch(modifiedRequest);
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: newHeaders,
+  });
+
+} catch (error) {
+  return new Response(`Proxy error to Home Assistant: ${error.message}`, { status: 502 });
+}
 
  // ✅ Cron handler：每 30 分鐘觸發一次，可自訂邏輯
 export const scheduled = newFunction();
@@ -144,5 +152,9 @@ function newFunction() {
     console.log("⏰ Cron job triggered at", new Date().toISOString());
 
   };
+}
+
+function example() {
+  console.log("This is a valid block.");
 }
 
