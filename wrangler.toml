@@ -13,6 +13,7 @@ command = ""
 # --- 路由設定 ---
 # 確保這整個區塊在頂層，不在 [build] 裡面
 routes = [
+  "nas.mingleedan.org/*",
   "home.mingleedan.org/*",
   "admin.mingleedan.org/*",
   "api.mingleedan.org/*",
