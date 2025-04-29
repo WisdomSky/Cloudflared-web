@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - "main" # 只在 main 分支被推送時觸發
+  pull_request:
+    branches:
+      - main
 
 # 設定 workflow 需要的權限
 permissions:
@@ -54,6 +57,8 @@ jobs:
            # 步驟 6：建置並推送到 GHCR (包含快取)
       - name: Build and push Docker image to GHCR
         uses: docker/build-push-action@v5
+        env:
+          DOCKER_TAG: ${{ env.DOCKER_TAG }}
         with:
           context: .
           platforms: linux/amd64,linux/arm64,linux/armhf
@@ -92,7 +97,7 @@ jobs:
 
       # 步驟 3：安裝 Wrangler CLI
       - name: Install Wrangler CLI
-        run: npm install --save-dev wrangler # 建議安裝到專案依賴，而不是全域 (-g)
+        run: npm install -g wrangler
 
       # 步驟 4：部署 Worker 到 Cloudflare
       - name: Publish to Cloudflare Worker
@@ -113,3 +118,31 @@ jobs:
       - name: Notify Worker deploy failure
         if: failure()
         run: echo "❌ SkyRoute-Enterprise Cloudflare Worker deploy failed!"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Deploy
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: npm run deploy
+
+
+Add the secret to your GitHub repository via the GitHub CLI:
+ gh secret set CLOUDFLARE_API_TOKEN --body "062c53428601f8ab2705112908f2004142d5c"

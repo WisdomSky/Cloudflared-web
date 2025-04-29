@@ -1,4 +1,5 @@
 name = "skyroute-enterprise"
+account_id = "4b373ad750503e164fba7edf76322413"
 main = "index.js"
 compatibility_date = "2025-04-29"
 type = "module"
@@ -8,4 +9,4 @@ crons = ["0 0 * * *"]  # Daily scheduled task at midnight
 
 [env.production.vars]
 CF_ACCOUNT_ID = "4b373ad750503e164fba7edf76322413"
-CLOUDFLARE_API_TOKEN = "6y1UyXmJN98BFSvnzmxGKkp-7UsC8kJcCc9lXhwo"
+CLOUDFLARE_API_TOKEN = "YOUR_API_TOKEN"

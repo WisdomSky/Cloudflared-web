@@ -16,10 +16,6 @@ export default {
       });
     }
 
-    if (url.pathname === "/favicon.ico") {
-      return new Response("", { status: 204 });
-    }
-
     if (url.pathname.startsWith("/api/")) {
       const action = url.searchParams.get("action");
       if (!action) {
@@ -91,7 +87,6 @@ export default {
   }
 };
 
-// 📦 通用 Proxy 處理函式
 async function proxyRequest(url, request, targetHost, targetPort, basePath) {
   const targetUrl = new URL(request.url);
   targetUrl.hostname = targetHost;
@@ -114,20 +109,4 @@ async function proxyRequest(url, request, targetHost, targetPort, basePath) {
     newHeaders.set("Referrer-Policy", "strict-origin-when-cross-origin");
     newHeaders.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
     newHeaders.set("Permissions-Policy", "accelerometer=(), camera=(), microphone=()");
-    newHeaders.set("Access-Control-Allow-Origin", "*");
-    newHeaders.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    newHeaders.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-    if (request.method === "OPTIONS") {
-      return new Response(null, { status: 204, headers: newHeaders });
-    }
-
-    return new Response(response.body, {
-      status: response.status,
-      statusText: response.statusText,
-      headers: newHeaders,
-    });
-  } catch (error) {
-    return new Response(`Tunnel error: ${error.message}`, { status: 502 });
-  }
-}
+    newHeaders.set

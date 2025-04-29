@@ -1,11 +1,13 @@
-# Workflow 名稱
-name: SkyRoute-Enterprise - Build and Push to GHCR Only
+# Workflow 名稱，說明包含建置映像檔和部署 Worker
+name: SkyRoute-Enterprise - Build Image (GHCR) & Deploy Worker 🚀
 
-# 觸發條件：當 main 分支有 push 事件時
 on:
   push:
     branches:
-      - "main"
+      - "main" # 只在 main 分支被推送時觸發
+  pull_request:
+    branches:
+      - main
 
 # 設定 workflow 需要的權限
 permissions:
@@ -43,77 +45,96 @@ jobs:
       - name: Generate safe version tag
         id: docker_tag_generator
         run: |
-          # 嘗試從 Dockerfile 取得版本，若無則用預設值
-          VERSION=$(grep -oP '(?<=ARG CLOUDFLARED_VERSION=).*' Dockerfile || echo "2025.4.0")
-          # 再次確認 VERSION 不是空的
-          if [ -z "$VERSION" ]; then
-            VERSION="2025.4.0"
-          fi
-          # 取得日期標籤 YYYYMMDD
+          # 嘗試從 Dockerfile 提取版本，如果失敗或為空，使用預設值
+          VERSION=$(grep -oP '(?<=ARG CLOUDFLARED_VERSION=).*' Dockerfile | tr -d '\n' || echo "2025.4.0")
+          if [ -z "$VERSION" ]; then VERSION="2025.4.0"; fi
           DATE_TAG=$(date +'%Y%m%d')
-          # 取得短 Commit SHA
           COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
-          # 組成最終標籤，格式：版本-日期-SHA
-          FINAL_TAG="${VERSION}-${DATE_TAG}-${COMMIT_SHA}"
-          # 清理標籤中的換行符 (保險起見)
-          FINAL_TAG=$(echo $FINAL_TAG | tr -d '\n')
-          # 清理標籤中除了字母、數字、點、底線、減號以外的字元 (保險起見)
-          FINAL_TAG=$(echo $FINAL_TAG | sed 's/[^a-zA-Z0-9._-]//g')
-          # 設定環境變數 DOCKER_TAG 供後續步驟使用
+          # 確保組合後的標籤是有效的 Docker 標籤格式
+          FINAL_TAG=$(echo "${VERSION}-${DATE_TAG}-${COMMIT_SHA}" | sed 's/[^a-zA-Z0-9._-]/-/g')
+          # 將最終標籤設置為環境變數，供後續步驟使用
           echo "DOCKER_TAG=${FINAL_TAG}" >> $GITHUB_ENV
-          # 在 Log 中印出產生的標籤
           echo "🔥 Docker tag generated: ${FINAL_TAG}"
 
-      
       # 步驟 6：建置並推送到 GHCR (包含快取)
       - name: Build and push Docker image to GHCR
         uses: docker/build-push-action@v5
+        env:
+          # 從環境變數讀取生成的 Docker 標籤
+          DOCKER_TAG: ${{ env.DOCKER_TAG }}
         with:
           context: .
-          platforms: linux/amd64,linux/arm64,linux/armhf # 建置多平台映像檔
-          push: true # 推送到 Registry
-          tags: | # 使用多行字串列出所有標籤
-            ghcr.io/danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
-            ghcr.io/danieltheflukr/skyroute-enterprise:latest
+          platforms: linux/amd64,linux/arm64 # <--- 簡化了平台，如有需要可加回 armhf
+          push: ${{ github.event_name == 'push' }} # 只有在 push 到 main 分支時才推送
+          tags: | # 使用多行字串列出標籤
+            ghcr.io/${{ github.repository_owner }}/skyroute-enterprise:${{ env.DOCKER_TAG }}
+            ghcr.io/${{ github.repository_owner }}/skyroute-enterprise:latest
           # --- 使用 GitHub Actions Cache 加速 Docker 建置 ---
           cache-from: type=gha
           cache-to: type=gha,mode=max
           # --- 快取設定結束 ---
 
       # 步驟 7：通知 Docker 建置成功
-      - name: Notify Docker build success
-        run: echo "✅ SkyRoute-Enterprise image pushed to GHCR successfully!"
+      - name: Notify Docker build status
+        if: always() # 無論成功或失敗都執行
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ SkyRoute-Enterprise image (Tag: ${{ env.DOCKER_TAG }}) pushed to GHCR successfully!"
+          else
+            echo "❌ SkyRoute-Enterprise image build/push failed."
+          fi
 
-  # --- 預留：將來如需 Worker 自動部署，可以取消註解此區塊 ---
-  # worker:
-  #   name: Deploy Cloudflare Worker
-  #   runs-on: ubuntu-latest
-  #   needs: docker # 在 docker job 成功後才開始
-  #
-  #   steps:
-  #     - name: Checkout source code
-  #       uses: actions/checkout@v4
-  #
-  #     - name: Set up Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 18
-  #         cache: 'npm'
-  #         # cache-dependency-path: path/to/your/worker/package-lock.json # 如有需要請指定
-  #
-  #     - name: Install Wrangler CLI
-  #       run: npm install --save-dev wrangler
-  #
-  #     - name: Publish to Cloudflare Worker
-  #       env:
-  #         CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-  #         # CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }} # 如有需要請取消註解並設定 Secret
-  #       run: npx wrangler deploy
-  #
-  #     - name: Notify Worker deploy success
-  #       if: success()
-  #       run: echo "✅ SkyRoute-Enterprise Cloudflare Worker deployed successfully!"
-  #
-  #     - name: Notify Worker deploy failure
-  #       if: failure()
-  #       run: echo "❌ SkyRoute-Enterprise Cloudflare Worker deploy failed!"
+  # --- 第二個 Job：測試並部署 Cloudflare Worker ---
+  worker:
+    name: Test & Deploy Cloudflare Worker # <--- 修改了 Job 名稱
+    runs-on: ubuntu-latest
+    needs: docker # <--- 這個 job 會在 'docker' job 成功完成後才開始
+
+    steps:
+      # 步驟 1：取得原始碼 (Worker 部署和測試都需要原始碼)
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # 步驟 2：設定 Node.js 環境
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18 # <--- 建議使用 LTS 版本，或根據你的需求調整
+          cache: 'npm' # <--- 為 npm install 加入快取
+          # cache-dependency-path: path/to/your/worker/package-lock.json # 如果 package-lock.json 不在根目錄
+
+      # 步驟 3：安裝依賴 (包含 wrangler CLI 和測試框架)
+      - name: Install dependencies # <--- 新增步驟
+        run: npm install
+
+      # 步驟 4：執行測試 # <--- 新增步驟
+      - name: Run tests
+        run: npm test # 假設你的測試指令是 'npm test'
+
+      # 步驟 5：部署 Worker 到 Cloudflare (只有在前面的步驟都成功時才會執行)
+      - name: Publish to Cloudflare Worker
+        # 只在 push 到 main 分支且測試通過後才部署
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          # --- 確保這些 Secrets 已經在 GitHub Repo Settings > Secrets and variables > Actions 中建立 ---
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          # --- 如果 wrangler.toml 需要帳號 ID 且沒有硬編碼，也需要設定 ---
+          # CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        # 使用 npx 執行專案中安裝的 wrangler，避免全局安裝的版本衝突
+        run: npx wrangler deploy
+
+      # 步驟 6：通知 Worker 部署狀態
+      - name: Notify Worker deploy status
+        if: always() # 無論成功或失敗都執行
+        run: |
+          # 檢查部署步驟是否被跳過 (例如因為不是 push 到 main 或測試失敗)
+          if [ "${{ steps.publish.outcome }}" == "skipped" ]; then
+            echo "ℹ️ Cloudflare Worker deployment skipped (not a push to main or previous steps failed)."
+          elif [ "${{ job.status }}" == "success" ]; then
+            echo "✅ SkyRoute-Enterprise Cloudflare Worker deployed successfully!"
+          else
+            # 涵蓋了 npm install, npm test, 或 wrangler deploy 失敗的情況
+            echo "❌ SkyRoute-Enterprise Cloudflare Worker test or deploy failed!"
+          fi
+
+  # --- build-and-deploy Job 已被移除 ---
