@@ -43,6 +43,17 @@ jobs:
 
       # 步驟 5：產生 Docker Tag
       - name: Generate safe version tag
+  id: docker_tag_generator
+  run: |
+    # Try to extract the version from Dockerfile; fallback to default if empty
+    VERSION=$(grep -oP '(?<=ARG CLOUDFLARED_VERSION=).*' Dockerfile | tr -d '\n' || echo "2025.4.0")
+    if [ -z "$VERSION" ]; then VERSION="2025.4.0"; fi
+    DATE_TAG=$(date +'%Y%m%d')
+    COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+    # Ensure the final tag is valid and lowercase
+    FINAL_TAG=$(echo "${VERSION}-${DATE_TAG}-${COMMIT_SHA}" | sed 's/[^a-zA-Z0-9._-]/-/g' | tr '[:upper:]' '[:lower:]')
+    echo "DOCKER_TAG=${FINAL_TAG}" >> $GITHUB_ENV
+    echo "🔥 Docker tag generated: ${FINAL_TAG}"- name: Generate safe version tag
         id: docker_tag_generator
         run: |
           # 嘗試從 Dockerfile 提取版本，如果失敗或為空，使用預設值
