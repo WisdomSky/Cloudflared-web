@@ -1,158 +1,213 @@
 {
-    // --- Home Assistant Extension Settings ---
-    "vscode-home-assistant.hostUrl": "https://home.mingleedan.org", // <-- 修正 URL 格式
-  
-    // --- HTML Formatting ---
-    "html.format.indentHandlebars": true,
-    "html.format.enable": true,
-    "html.format.unformatted": "script,style,source",
-    "html.format.wrapAttributes": "auto",
-    "html.validate.scripts": true,
-    "html.format.indentInnerHtml": true,
-    "html.format.templating": true,
-  
-    // --- Editor Behavior ---
-    "editor.formatOnPaste": true,
-    "editor.formatOnType": true,
-    "diffEditor.hideUnchangedRegions.enabled": true,
-    "diffEditor.renderSideBySide": false,
-    "workbench.editor.enablePreview": false, // 禁用預覽模式，直接開啟檔案
-    "editor.defaultFormatter": "esbenp.prettier-vscode", // <-- 這是從錯誤位置移過來的全域預設格式化工具
-    "editor.formatOnSave": true, // <-- 這是從錯誤位置移過來的設定
-  
-    // --- TypeScript / JavaScript ---
-    "typescript.suggest.autoImports": true,
-    "typescript.suggest.completeFunctionCalls": true,
-    "typescript.suggest.autoImportsSuggestions.enabled": true,
-    "debug.javascript.autoAttachFilter": "always",
-    "typescript.tsdk": "node_modules/typescript/lib", // <-- 這是從錯誤位置移過來的設定
-  
-    // --- ESLint ---
-    "eslint.alwaysShowRuleFailuresAsWarnings": false,
-    "eslint.runtime": "node", // <-- 這是從錯誤位置移過來的設定
-    "eslint.workingDirectories": [ // <-- 這是從錯誤位置移過來的設定
-      {
-        "mode": "auto"
-      }
-    ],
-  
-    // --- Language Specific Settings ---
-    "[home-assistant]": {
-      "breadcrumbs.showArrays": true,
-      "editor.insertSpaces": true,
-      "editor.tabSize": 2,
-      "editor.quickSuggestions": {
-        "other": true,
-        "comments": false,
-        "strings": true
-      },
-      "editor.autoIndent": "advanced"
-    },
-    "[yaml]": {
-      "editor.insertSpaces": true,
-      "editor.tabSize": 2,
-      "editor.autoIndent": "keep",
-      "diffEditor.ignoreTrimWhitespace": false,
-      "editor.quickSuggestions": {
-        "other": true,
-        "comments": false,
-        "strings": true
-      }
-    },
-    "[markdown]": {
-      "diffEditor.ignoreTrimWhitespace": true
-    },
-    "[html]": { // <-- 這是從錯誤位置移過來的設定
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[typescript]": { // <-- 這是從錯誤位置移過來的設定
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[ignore]": { // <-- 這是從錯誤位置移過來的設定
-      "editor.defaultFormatter": "foxundermoon.shell-format"
-    },
-  
-    // --- File Associations (Merged) ---
-    "files.associations": {
-      "*.py": "python", // <-- 從原本第一個合併過來的
-      "api-extractor.json": "jsonc",
-      "CODEOWNERS": "plaintext",
-      "*.template": "javascript",
-      "wrangler.json": "jsonc"
-    },
-    "files.trimTrailingWhitespace": true, // <-- 這是從錯誤位置移過來的設定
-  
-    // --- Spell Checking (cSpell Extension) ---
-    "cSpell.words": [ // <-- 這是從錯誤位置移過來的設定
-        "Abortable", "assetsignore", "astro", "cf-typegen", "cfetch", "chatgpt",
-        "clipboardy", "cloudflareaccess", "cloudflared", "Codespaces", "esbuild",
-        "eslintcache", "execa", "filestat", "haikunate", "haikunator", "Hono",
-        "httplogs", "iarna", "isolinear", "keyvalue", "logfwdr", "metafile",
-        "middlewares", "Miniflare", "mockpm", "mrbbot", "mtls", "nodeless",
-        "Nuxt", "outdir", "outfile", "pgrep", "PKCE", "Positionals", "qwik",
-        "Redistributable", "reinitialise", "scandir", "selfsigned", "textfile",
-        "tsbuildinfo", "turborepo", "undici", "unenv", "unrevoke", "Untriaged",
-        "userconfig", "versionless", "wasmvalue", "weakmap", "weakset",
-        "webassemblymemory", "websockets", "workerd", "xxhash", "zjcompt"
-    ],
-    "cSpell.ignoreWords": [ // <-- 這是從錯誤位置移過來的設定
-        "TESTTEXTBLOBNAME", "TESTWASMNAME", "extensionless", "webcontainer", "yxxx"
-    ],
-  
-    // --- Red Hat Telemetry ---
-    "redhat.telemetry.enabled": true,
-  
-    // --- YAML Extension Settings ---
-    "yaml.trace.server": "verbose",
-  
-    // --- Kubernetes Extension Settings ---
-    "vs-kubernetes": {
-      "vscode-kubernetes.helm-path-windows": "C:\\Users\\havea\\.vs-kubernetes\\tools\\helm\\windows-amd64\\helm.exe",
-      "vscode-kubernetes.minikube-path-windows": "C:\\Users\\havea\\.vs-kubernetes\\tools\\minikube\\windows-amd64\\minikube.exe",
-      "vs-kubernetes.minikube-show-information-expiration": "2025-03-10T03:14:47.419Z",
-      "vscode-kubernetes.kubectl-path-windows": "C:\\Users\\havea\\.vs-kubernetes\\tools\\kubectl\\kubectl.exe"
-    },
-  
-    // --- Security & Trust ---
-    "security.workspace.trust.untrustedFiles": "open",
-    "security.workspace.trust.banner": "always",
-  
-    // --- Settings Sync / Profiles ---
-    "workbench.settings.applyToAllProfiles": [
-      "vscode-home-assistant.hostUrl"
-      // 注意： longLivedAccessToken 已被移除，所以這裡也不需要了
-    ],
-  
-    // --- Build System Integration ---
-    "makefile.configureOnOpen": true,
-    "cmake.configureOnOpen": true,
-    "cmake.pinnedCommands": [],
-    "cmake.showOptionsMovedNotification": false,
-  
-    // --- Git & GitLens ---
-    "git.autofetch": true,
-    "git.confirmSync": false, // 取消同步前的確認
-    "gitlens.advanced.messages": {
-      "suppressCommitHasNoPreviousCommitWarning": true
-    },
-    "gitlens.graph.minimap.enabled": false,
-    "gitlens.launchpad.indicator.enabled": false,
-    "gitlens.ai.model": "openai:gpt-4o",
-  
-    // --- Project Manager Extension ---
-    "projectManager.git.baseFolders": [
-      "D:\\"
-    ],
-  
-    // --- Other Extensions ---
-    "genieai.promptPrefix.customPrompt1-enabled": true,
-    "genieai.response.showNotification": true,
-  
-    // --- Remote Development ---
-    "remote.SSH.remotePlatform": {
-      "192.168.31.173": "linux"
+  // --- Home Assistant Extension Settings ---
+  "vscode-home-assistant.hostUrl": "https://home.mingleedan.org", // <-- 修正 URL 格式
+
+  // --- HTML Formatting ---
+  "html.format.indentHandlebars": true,
+  "html.format.enable": true,
+  "html.format.unformatted": "script,style,source",
+  "html.format.wrapAttributes": "auto",
+  "html.validate.scripts": true,
+  "html.format.indentInnerHtml": true,
+  "html.format.templating": true,
+
+  // --- Editor Behavior ---
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true,
+  "diffEditor.hideUnchangedRegions.enabled": true,
+  "diffEditor.renderSideBySide": false,
+  "workbench.editor.enablePreview": false, // 禁用預覽模式，直接開啟檔案
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // <-- 這是從錯誤位置移過來的全域預設格式化工具
+  "editor.formatOnSave": true, // <-- 這是從錯誤位置移過來的設定
+
+  // --- TypeScript / JavaScript ---
+  "typescript.suggest.autoImports": true,
+  "typescript.suggest.completeFunctionCalls": true,
+  "typescript.suggest.autoImportsSuggestions.enabled": true,
+  "debug.javascript.autoAttachFilter": "always",
+  "typescript.tsdk": "node_modules/typescript/lib", // <-- 這是從錯誤位置移過來的設定
+
+  // --- ESLint ---
+  "eslint.alwaysShowRuleFailuresAsWarnings": false,
+  "eslint.runtime": "node", // <-- 這是從錯誤位置移過來的設定
+  "eslint.workingDirectories": [
+    // <-- 這是從錯誤位置移過來的設定
+    {
+      "mode": "auto"
     }
-  
-    // --- 已刪除的設定 ---
-    // "vscode-home-assistant.longLivedAccessToken": "...", // <-- 確保這一行已被刪除！非常重要！
+  ],
+
+  // --- Language Specific Settings ---
+  "[home-assistant]": {
+    "breadcrumbs.showArrays": true,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.autoIndent": "advanced"
+  },
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "keep",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    }
+  },
+  "[markdown]": {
+    "diffEditor.ignoreTrimWhitespace": true
+  },
+  "[html]": {
+    // <-- 這是從錯誤位置移過來的設定
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    // <-- 這是從錯誤位置移過來的設定
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[ignore]": {
+    // <-- 這是從錯誤位置移過來的設定
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+
+  // --- File Associations (Merged) ---
+  "files.associations": {
+    "*.py": "python", // <-- 從原本第一個合併過來的
+    "api-extractor.json": "jsonc",
+    "CODEOWNERS": "plaintext",
+    "*.template": "javascript",
+    "wrangler.json": "jsonc"
+  },
+  "files.trimTrailingWhitespace": true, // <-- 這是從錯誤位置移過來的設定
+
+  // --- Spell Checking (cSpell Extension) ---
+  "cSpell.words": [
+    // <-- 這是從錯誤位置移過來的設定
+    "Abortable",
+    "assetsignore",
+    "astro",
+    "cf-typegen",
+    "cfetch",
+    "chatgpt",
+    "clipboardy",
+    "cloudflareaccess",
+    "cloudflared",
+    "Codespaces",
+    "esbuild",
+    "eslintcache",
+    "execa",
+    "filestat",
+    "haikunate",
+    "haikunator",
+    "Hono",
+    "httplogs",
+    "iarna",
+    "isolinear",
+    "keyvalue",
+    "logfwdr",
+    "metafile",
+    "middlewares",
+    "Miniflare",
+    "mockpm",
+    "mrbbot",
+    "mtls",
+    "nodeless",
+    "Nuxt",
+    "outdir",
+    "outfile",
+    "pgrep",
+    "PKCE",
+    "Positionals",
+    "qwik",
+    "Redistributable",
+    "reinitialise",
+    "scandir",
+    "selfsigned",
+    "textfile",
+    "tsbuildinfo",
+    "turborepo",
+    "undici",
+    "unenv",
+    "unrevoke",
+    "Untriaged",
+    "userconfig",
+    "versionless",
+    "wasmvalue",
+    "weakmap",
+    "weakset",
+    "webassemblymemory",
+    "websockets",
+    "workerd",
+    "xxhash",
+    "zjcompt"
+  ],
+  "cSpell.ignoreWords": [
+    // <-- 這是從錯誤位置移過來的設定
+    "TESTTEXTBLOBNAME",
+    "TESTWASMNAME",
+    "extensionless",
+    "webcontainer",
+    "yxxx"
+  ],
+
+  // --- Red Hat Telemetry ---
+  "redhat.telemetry.enabled": true,
+
+  // --- YAML Extension Settings ---
+  "yaml.trace.server": "verbose",
+
+  // --- Kubernetes Extension Settings ---
+  "vs-kubernetes": {
+    "vscode-kubernetes.helm-path-windows": "C:\\Users\\havea\\.vs-kubernetes\\tools\\helm\\windows-amd64\\helm.exe",
+    "vscode-kubernetes.minikube-path-windows": "C:\\Users\\havea\\.vs-kubernetes\\tools\\minikube\\windows-amd64\\minikube.exe",
+    "vs-kubernetes.minikube-show-information-expiration": "2025-03-10T03:14:47.419Z",
+    "vscode-kubernetes.kubectl-path-windows": "C:\\Users\\havea\\.vs-kubernetes\\tools\\kubectl\\kubectl.exe"
+  },
+
+  // --- Security & Trust ---
+  "security.workspace.trust.untrustedFiles": "open",
+  "security.workspace.trust.banner": "always",
+
+  // --- Settings Sync / Profiles ---
+  "workbench.settings.applyToAllProfiles": [
+    "vscode-home-assistant.hostUrl"
+    // 注意： longLivedAccessToken 已被移除，所以這裡也不需要了
+  ],
+
+  // --- Build System Integration ---
+  "makefile.configureOnOpen": true,
+  "cmake.configureOnOpen": true,
+  "cmake.pinnedCommands": [],
+  "cmake.showOptionsMovedNotification": false,
+
+  // --- Git & GitLens ---
+  "git.autofetch": true,
+  "git.confirmSync": false, // 取消同步前的確認
+  "gitlens.advanced.messages": {
+    "suppressCommitHasNoPreviousCommitWarning": true
+  },
+  "gitlens.graph.minimap.enabled": false,
+  "gitlens.launchpad.indicator.enabled": false,
+  "gitlens.ai.model": "openai:gpt-4o",
+
+  // --- Project Manager Extension ---
+  "projectManager.git.baseFolders": ["D:\\"],
+
+  // --- Other Extensions ---
+  "genieai.promptPrefix.customPrompt1-enabled": true,
+  "genieai.response.showNotification": true,
+
+  // --- Remote Development ---
+  "remote.SSH.remotePlatform": {
+    "192.168.31.173": "linux"
   }
+
+  // --- 已刪除的設定 ---
+  // "vscode-home-assistant.longLivedAccessToken": "...", // <-- 確保這一行已被刪除！非常重要！
+}

@@ -1,24 +1,81 @@
 # SkyRoute-Enterprise
 
-🚀 SkyRoute-Enterprise 企業級自動化平台
+🚀 SkyRoute-Enterprise is an enterprise-grade automation platform designed to simplify and optimize the management of Cloudflare tunnels.
 
-目前專案已整合：
+![Build Status](https://img.shields.io/github/actions/workflow/status/Danieltheflukr/SkyRoute-Enterprise/main.yml?branch=main)
+![Docker Pulls](https://img.shields.io/docker/pulls/Danieltheflukr/skyroute-enterprise)
+![License](https://img.shields.io/github/license/Danieltheflukr/SkyRoute-Enterprise)
+![Last Commit](https://img.shields.io/github/last-commit/Danieltheflukr/SkyRoute-Enterprise)
 
-✅ GitHub Actions 自動部署
-✅ 基礎路由處理（含主頁 / 路由）
-✅ Cloudflare 全球邊緣網路部署
+## Table of Contents
 
-## 功能介紹
+1. [Features](#features)
+2. [Getting Started](#getting-started)
+3. [Usage](#usage)
+4. [Contributing](#contributing)
+5. [FAQs](#faqs)
 
-- 多平台編譯：`linux/amd64`, `linux/arm64`, `linux/armhf`
-- 自動生成版本號：版本號 + 日期 + Git Commit Hash
-- 自動三 tag：版本 tag / 企業級 tag / latest
-- 自動部署至 Cloudflare Worker
-- 自動推送 Docker 映像至 GitHub Container Registry
+---
 
-## TODO (持續優化中)
+## Features
 
-- [ ] 自動健康檢查回報
-- [ ] 整合 webhook 通知（LINE Notify / Telegram）
-- [ ] 鏡像失效自動重建
-- [ ] 完成每日定時 build
+| Feature                     | Description                                          | Status       |
+| --------------------------- | ---------------------------------------------------- | ------------ |
+| Multi-platform Compilation  | Supports `linux/amd64`, `linux/arm64`, `linux/armhf` | ✅           |
+| Automated Health Checks     | Periodic monitoring for deployed services            | 🚧 (Planned) |
+| Webhook Notifications       | Integration with LINE Notify, Telegram               | 🚧 (Planned) |
+| Auto-rebuild Expired Images | Rebuilds Docker images upon expiration               | 🚧 (Planned) |
+
+---
+
+### Architecture Diagram
+
+![Architecture Diagram](https://path-to-image/architecture.png)
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+| Software       | Minimum Version |
+| -------------- | --------------- |
+| Docker         | >= 20.10        |
+| Docker Compose | >= 1.29         |
+| Node.js        | >= 16.x         |
+
+---
+
+### Steps to Run
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Danieltheflukr/SkyRoute-Enterprise.git
+   cd SkyRoute-Enterprise
+   ```
+2. Build and run the application:
+   ```bash
+   docker-compose up --build
+   ```
+3. Access the Web UI:
+   Navigate to [http://localhost:8080](http://localhost:8080) in your browser.
+
+---
+
+## Contributing
+
+We welcome contributions to improve SkyRoute-Enterprise! To get started:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Submit a pull request with a detailed explanation.
+
+---
+
+## FAQs
+
+**Q: What is SkyRoute-Enterprise?**
+A: SkyRoute-Enterprise is a Docker image combining the Cloudflare CLI with a Web UI, enabling seamless tunnel management.
+
+**Q: Where can I access the Web UI?**
+A: After running the application, you can access it locally at [http://localhost:8080](http://localhost:8080).
