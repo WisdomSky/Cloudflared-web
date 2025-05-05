@@ -54,7 +54,7 @@ export default {
       return new Response("請指定 action 參數。\n範例：/api/?action=listTunnels", { status: 400 });
     }
     console.error(`Invalid action specified: ${action}`);
-    return new Response(`Invalid action specified: ${action}. Please use one of the following actions: verifyToken, listTunnels, listCertificates, listAccessApps. If you believe this is an error, please contact support with the action name: ${action}`, {
+    return new Response(`Invalid action specified: ${action}. Please use one of the following actions: verifyToken, listTunnels, listCertificates, listAccessApps. If you believe this is an error, [...]
       status: 400,
       headers: { "Content-Type": "text/plain; charset=utf-8" }
     });
