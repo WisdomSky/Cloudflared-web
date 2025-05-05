@@ -17,21 +17,20 @@
   "diffEditor.hideUnchangedRegions.enabled": true,
   "diffEditor.renderSideBySide": false,
   "workbench.editor.enablePreview": false, // 禁用預覽模式，直接開啟檔案
-  "editor.defaultFormatter": "esbenp.prettier-vscode", // <-- 這是從錯誤位置移過來的全域預設格式化工具
-  "editor.formatOnSave": true, // <-- 這是從錯誤位置移過來的設定
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // <-- 全域預設格式化工具
+  "editor.formatOnSave": true, // <-- 啟用儲存時格式化
 
   // --- TypeScript / JavaScript ---
   "typescript.suggest.autoImports": true,
   "typescript.suggest.completeFunctionCalls": true,
   "typescript.suggest.autoImportsSuggestions.enabled": true,
   "debug.javascript.autoAttachFilter": "always",
-  "typescript.tsdk": "node_modules/typescript/lib", // <-- 這是從錯誤位置移過來的設定
+  "typescript.tsdk": "node_modules/typescript/lib", // <-- TypeScript 設定
 
   // --- ESLint ---
   "eslint.alwaysShowRuleFailuresAsWarnings": false,
-  "eslint.runtime": "node", // <-- 這是從錯誤位置移過來的設定
+  "eslint.runtime": "node",
   "eslint.workingDirectories": [
-    // <-- 這是從錯誤位置移過來的設定
     {
       "mode": "auto"
     }
@@ -64,31 +63,27 @@
     "diffEditor.ignoreTrimWhitespace": true
   },
   "[html]": {
-    // <-- 這是從錯誤位置移過來的設定
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescript]": {
-    // <-- 這是從錯誤位置移過來的設定
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[ignore]": {
-    // <-- 這是從錯誤位置移過來的設定
     "editor.defaultFormatter": "foxundermoon.shell-format"
   },
 
-  // --- File Associations (Merged) ---
+  // --- File Associations ---
   "files.associations": {
-    "*.py": "python", // <-- 從原本第一個合併過來的
+    "*.py": "python",
     "api-extractor.json": "jsonc",
     "CODEOWNERS": "plaintext",
     "*.template": "javascript",
     "wrangler.json": "jsonc"
   },
-  "files.trimTrailingWhitespace": true, // <-- 這是從錯誤位置移過來的設定
+  "files.trimTrailingWhitespace": true, // <-- 啟用自動移除結尾空白
 
   // --- Spell Checking (cSpell Extension) ---
   "cSpell.words": [
-    // <-- 這是從錯誤位置移過來的設定
     "Abortable",
     "assetsignore",
     "astro",
@@ -148,7 +143,6 @@
     "zjcompt"
   ],
   "cSpell.ignoreWords": [
-    // <-- 這是從錯誤位置移過來的設定
     "TESTTEXTBLOBNAME",
     "TESTWASMNAME",
     "extensionless",
@@ -177,7 +171,6 @@
   // --- Settings Sync / Profiles ---
   "workbench.settings.applyToAllProfiles": [
     "vscode-home-assistant.hostUrl"
-    // 注意： longLivedAccessToken 已被移除，所以這裡也不需要了
   ],
 
   // --- Build System Integration ---
@@ -207,7 +200,6 @@
   "remote.SSH.remotePlatform": {
     "192.168.31.173": "linux"
   },
-  "githubPullRequests.ignoredPullRequestBranches": ["main"]
 
   // --- 已刪除的設定 ---
   // "vscode-home-assistant.longLivedAccessToken": "...", // <-- 確保這一行已被刪除！非常重要！
