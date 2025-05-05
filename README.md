@@ -1,24 +1,98 @@
-# SkyRoute-Enterprise
 
+SkyRoute-Enterprise
 🚀 SkyRoute-Enterprise 企業級自動化平台
 
-目前專案已整合：
+Currently Integrated Features:
+✅ GitHub Actions for automated deployment
+✅ Basic routing handling (including homepage and routing)
+✅ Deployment to Cloudflare's global edge network
+Features
+Multi-platform Compilation: Supports linux/amd64, linux/arm64, linux/armhf
+Automatic Versioning: Combines version number, date, and Git Commit Hash
+Three Automatic Tags: Version tag, enterprise-grade tag, and latest
+Automatic Deployment: Deploys to Cloudflare Worker
+Docker Image Push: Pushes Docker images to GitHub Container Registry
+TODO (Ongoing Improvements)
+ Automated health check reporting
+ Integration with webhook notifications (e.g., LINE Notify, Telegram)
+ Automatic rebuilding of expired images
+ Completion of daily scheduled builds
+If you need the content for other README files in subdirectories, let me know!
 
-✅ GitHub Actions 自動部署
-✅ 基礎路由處理（含主頁 / 路由）
-✅ Cloudflare 全球邊緣網路部署
+improve from the setting
+Here’s an improved README for SkyRoute-Enterprise, incorporating features and enhancements highlighted in your repository settings and existing README content:
 
-## 功能介紹
+SkyRoute-Enterprise
+🚀 SkyRoute-Enterprise is an enterprise-grade automation platform designed to simplify and optimize the management of Cloudflare tunnels. It combines the power of the Cloudflare CLI (cloudflared) with a modern, intuitive Web UI, enabling seamless deployment and management of tunnels across Cloudflare's global edge network.
 
-- 多平台編譯：`linux/amd64`, `linux/arm64`, `linux/armhf`
-- 自動生成版本號：版本號 + 日期 + Git Commit Hash
-- 自動三 tag：版本 tag / 企業級 tag / latest
-- 自動部署至 Cloudflare Worker
-- 自動推送 Docker 映像至 GitHub Container Registry
+Key Features
+Multi-Platform Support:
 
-## TODO (持續優化中)
+Compatible with linux/amd64, linux/arm64, and linux/armhf.
+Automated Deployment Pipeline:
 
-- [ ] 自動健康檢查回報
-- [ ] 整合 webhook 通知（LINE Notify / Telegram）
-- [ ] 鏡像失效自動重建
-- [ ] 完成每日定時 build
+Integrated with GitHub Actions for CI/CD.
+Automatically generates version tags combining version numbers, dates, and Git commit hashes.
+Deploys to Cloudflare Workers for edge computing.
+Dynamic Tagging:
+
+Generates three automatic tags:
+Version-specific tag
+Enterprise-grade tag
+latest tag
+Cloudflare API Integration:
+
+Supports dynamic API interactions such as:
+Token verification
+Listing tunnels
+Managing certificates and access applications
+Docker Image Management:
+
+Automatically builds and pushes Docker images to GitHub Container Registry.
+Scheduled Tasks:
+
+Automates daily builds using cron triggers.
+Upcoming Improvements (TODO)
+ Automated Health Check Reports:
+
+Implement periodic health monitoring for deployed services.
+ Webhook Notifications:
+
+Integrate with LINE Notify and Telegram for real-time updates.
+ Auto-Rebuild Expired Images:
+
+Automatically rebuild Docker images upon expiration.
+ Enhanced Build Scheduling:
+
+Finalize infrastructure for daily scheduled builds.
+Getting Started
+Prerequisites
+Docker and Docker Compose installed.
+A Cloudflare account with API tokens configured.
+Steps to Run
+Clone the repository:
+
+bash
+git clone https://github.com/Danieltheflukr/SkyRoute-Enterprise.git
+cd SkyRoute-Enterprise
+Build and run the application:
+
+bash
+docker-compose up --build
+Access the Web UI:
+
+Navigate to http://localhost:8080 in your browser.
+Contributing
+We welcome contributions to improve SkyRoute-Enterprise! To get started:
+
+Fork the repository.
+Create a new branch for your feature or bug fix.
+Submit a pull request with a detailed explanation.
+License
+SkyRoute-Enterprise is released under the MIT License. See the LICENSE file for details.
+
+Contact
+For questions or support, feel free to reach out:
+
+Author: Danieltheflukr
+Issues: Submit here
