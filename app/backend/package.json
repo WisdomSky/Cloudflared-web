@@ -17,4 +17,13 @@
     "express-basic-auth": "^1.2.1",
     "tmp": "^0.2.3"
   }
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "build",
+      "label": "build-frontend",
+      "path": "app/frontend",
+      "problemMatcher": []
+    }
+  ]
 }
