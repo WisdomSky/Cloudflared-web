@@ -1,38 +1,12 @@
-# --- 頂層設定 ---
 name = "skyroute-enterprise"
 account_id = "4b373ad750503e164fba7edf76322413"
 main = "index.js"
-compatibility_date = "2025-04-08"
-format = "modules" # <--- 確保這行在頂層，不在 [build] 裡面
+compatibility_date = "2025-04-29"
+type = "module"
 
-# --- 建置設定 ---
-# 如果不需要建置，command 留空或移除此區塊
-[build]
-command = ""
+[triggers]
+crons = ["0 0 * * *"] # Daily scheduled task at midnight
 
-# --- 路由設定 ---
-# 確保這整個區塊在頂層，不在 [build] 裡面
-routes = [
-  "nas.mingleedan.org/*",
-  "home.mingleedan.org/*",
-  "admin.mingleedan.org/*",
-  "api.mingleedan.org/*",
-  "webhook.mingleedan.org/*",
-  "skyroute-enterprise.mingleedan.org/*"
-]
-
-# --- 觸發器設定 ---
-# 確保這整個區塊在頂層，不在 [build] 裡面
-triggers = { crons = ["*/30 * * * *"] }
-
-# --- 可觀察性設定 ---
-# 確保這整個區塊在頂層
-[observability.logs]
-enabled = true
-
-# --- 移除了 [vars] 區塊 ---
-# 請記得用 `npx wrangler secret put ...` 設定你的 Secrets
-
-# --- 其他可能的設定 (範例) ---
-# [kv_namespaces] # 確保這也在頂層
-# { binding = "AUTH_STORAGE", id = "你的KV_Namespace_ID" }
+[env.production.vars]
+CF_ACCOUNT_ID = "4b373ad750503e164fba7edf76322413"
+CLOUDFLARE_API_TOKEN = "YOUR_API_TOKEN"
