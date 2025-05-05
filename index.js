@@ -79,7 +79,7 @@ export default {
       switch (action) {
         case 'verifyToken':
           result = await apiRequest('/user/tokens/verify');
-          break;
+            break;
         case 'listTunnels':
           result = await apiRequest(`/accounts/${env.CF_ACCOUNT_ID}/cfd_tunnel`);
           break;

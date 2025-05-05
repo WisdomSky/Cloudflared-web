@@ -30,8 +30,7 @@
   // --- ESLint ---
   "eslint.alwaysShowRuleFailuresAsWarnings": false,
   "eslint.runtime": "node", // <-- 這是從錯誤位置移過來的設定
-  "eslint.workingDirectories": [
-    // <-- 這是從錯誤位置移過來的設定
+    "eslint.workingDirectories": [ // <-- 這是從錯誤位置移過來的設定
     {
       "mode": "auto"
     }
@@ -63,17 +62,14 @@
   "[markdown]": {
     "diffEditor.ignoreTrimWhitespace": true
   },
-  "[html]": {
-    // <-- 這是從錯誤位置移過來的設定
+    "[html]": { // <-- 這是從錯誤位置移過來的設定
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[typescript]": {
-    // <-- 這是從錯誤位置移過來的設定
+    "[typescript]": { // <-- 這是從錯誤位置移過來的設定
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[ignore]": {
-    // <-- 這是從錯誤位置移過來的設定
-    "editor.defaultFormatter": "foxundermoon.shell-format"
+  "[ignore]": { // <-- 這是從錯誤位置移過來的設定
+      "editor.defaultFormatter": "foxundermoon.shell-format"
   },
 
   // --- File Associations (Merged) ---
