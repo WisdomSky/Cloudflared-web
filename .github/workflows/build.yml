@@ -66,8 +66,8 @@ jobs:
           platforms: linux/amd64,linux/arm64 # <--- 簡化了平台，如有需要可加回 armhf
           push: ${{ github.event_name == 'push' }} # 只有在 push 到 main 分支時才推送
           tags: | # 使用多行字串列出標籤
-            ghcr.io/${{ github.repository_owner }}/skyroute-enterprise:${{ env.DOCKER_TAG }}
-            ghcr.io/${{ github.repository_owner }}/skyroute-enterprise:latest
+            ghcr.io/danieltheflukr/skyroute-enterprise:${{ env.DOCKER_TAG }}
+            ghcr.io/danieltheflukr/skyroute-enterprise:latest
           # --- 使用 GitHub Actions Cache 加速 Docker 建置 ---
           cache-from: type=gha
           cache-to: type=gha,mode=max
