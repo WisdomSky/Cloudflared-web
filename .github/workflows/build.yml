@@ -107,8 +107,9 @@ jobs:
         run: npm install
 
       # 步驟 4：執行測試 # <--- 新增步驟
-      - name: Run tests
-        run: npm test # 假設你的測試指令是 'npm test'
+      - name: Run backend tests
+        working-directory: app/backend
+        run: npm test
 
       # 步驟 5：部署 Worker 到 Cloudflare (只有在前面的步驟都成功時才會執行)
       - name: Publish to Cloudflare Worker
