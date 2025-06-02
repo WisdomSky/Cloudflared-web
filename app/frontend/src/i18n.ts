@@ -7,6 +7,7 @@ import esBR from '@/locales/es-BR'
 import ru from '@/locales/ru'
 import ja from '@/locales/ja'
 import fr from '@/locales/fr'
+import tr from '@/locales/tr'
 
 const i18n = createI18n({
     locale: localStorage.getItem('locale') || "en",
@@ -18,7 +19,8 @@ const i18n = createI18n({
         'es-BR': esBR,
         'ru': ru,
         'ja': ja,
-        'fr': fr
+        'fr': fr,
+        'tr': tr
     }
 })
 

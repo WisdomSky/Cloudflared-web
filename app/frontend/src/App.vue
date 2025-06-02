@@ -123,6 +123,7 @@
           <SelectItem value="ru">русский (RU)</SelectItem>
           <SelectItem value="ja">日本語 (JA)</SelectItem>
           <SelectItem value="fr">Français (FR)</SelectItem>
+          <SelectItem value="tr">Türkçe (TR)</SelectItem>
         </SelectContent>
       </Select>
     </div>
