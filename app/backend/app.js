@@ -151,15 +151,16 @@ app.post('/advanced/config/local', (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`WebUI running on port ${port}`);
+  console.log('STATUS: Init');
+  console.log('ENVIRONMENT: ', JSON.stringify(process.env));
   let config = getConfig();
   if (config.start) {
-    console.log('Restarting cloudflare tunnel.');
     init({start: false});
     setTimeout(() => {
       init(config);
     }, 2000);
   }
+  console.log(`WEBUI PORT: ${port}`);
 })
 
 
@@ -172,17 +173,18 @@ function getConfig() {
     const json = JSON.parse(fs.readFileSync(configpath));
     config = json;
   } catch(e) {
-    console.log('No pre-existing config file found.');
+    console.log('CONFIG: No pre-existing config file found.');
   }
   return config;
 }
 
 function init(config, res) {
+
   tunnel.token = config.token;
   try {
     if (config.start) {
 
-      let additionalArgs = {}
+      let additionalArgs = { }
 
       if (process.env.METRICS_ENABLE === 'true') {
         additionalArgs.metrics = process.env.METRICS_PORT;
@@ -216,18 +218,21 @@ function init(config, res) {
         additionalArgs.configPath = cloudflaredconfigpath;
       }
 
+      console.log('ADDITIONAL ARGS: ', additionalArgs);
+
       tunnel.start(additionalArgs);
       if (res !== undefined) {
         res.status(200).send('Started');
       }
-      console.log(`Cloudflare tunnel started. `);
-      console.log(`Using token: ${config.token}`);
+      console.log(`STATUS: Started`);
+      console.log('-------------------------- CLOUDFLARE TUNNEL LOGS START --------------------------')
+      // console.log(`Using token: ${config.token}`);
     } else {
       tunnel.stop();
       if (res !== undefined) {
         res.status(200).send('Stopped');
       }
-      console.log("Cloudflare tunnel stopped");
+      console.log("STATUS: Stopped");
     }
   } catch (e) {
     console.log(e);

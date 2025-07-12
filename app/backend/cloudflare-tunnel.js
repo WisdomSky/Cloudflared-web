@@ -61,7 +61,7 @@ class CloudflaredTunnel {
     }
 
     emitChange(msg, code) {
-        console.log(msg);
+        console.log('TUNNEL: ', msg);
     }
 
     emitError(msg) {
@@ -142,6 +142,8 @@ class CloudflaredTunnel {
         args.push("run");
         args.push("--token");
         args.push(this.token);
+
+        console.log('EXEC COMMAND: ', args.join(' '));
 
         this.emitChange("Starting cloudflared");
         this.childProcess = childProcess.spawn(this.cloudflaredPath, args);
