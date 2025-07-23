@@ -206,11 +206,11 @@ function init(config, res) {
         additionalArgs.retries = process.env.RETRIES;
       }
 
-      if (['4','6'].indexOf(process.env.EDGE_IP_VERSION) !== -1) {
+      if ('EDGE_IP_VERSION' in process.env) {
         additionalArgs.edgeIpVersion = process.env.EDGE_IP_VERSION;
       }
 
-      if (['http2','quic'].indexOf(process.env.PROTOCOL) !== -1) {
+      if ('PROTOCOL' in process.env) {
         additionalArgs.protocol = process.env.PROTOCOL;
       }
 
