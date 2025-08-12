@@ -1,6 +1,6 @@
 # [Cloudflared-web](https://github.com/WisdomSky/Cloudflared-web)
 
-_Cloudflared-web is a docker image that packages both cloudflared cli and a simple Web UI to easily start or stop remotely-managed Cloudflare tunnel._
+_Cloudflared-web is a docker image that packages both [cloudflared cli](https://github.com/cloudflare/cloudflared/releases) and a simple Web UI to easily start or stop remotely-managed Cloudflare tunnel._
 
 
 [![build](https://github.com/WisdomSky/Cloudflared-web/workflows/Build/badge.svg)](https://github.com/WisdomSky/Cloudflared-web/actions "Build Status")
