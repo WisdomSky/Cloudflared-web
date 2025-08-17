@@ -1,7 +1,7 @@
 <template>
-  <div class="cf-container h-[100vh] flex items-center justify-center">
-    <form id="cf-form" method="post" @submit.prevent>
-      <Card class="w-[550px]">
+  <div class="cf-container h-[100vh] w-100 flex items-center justify-center">
+    <form id="cf-form" method="post" @submit.prevent class="w-full max-w-[650px] mx-auto px-4 min-w-[320px]">
+      <Card class="w-full">
         <CardHeader>
           <CardTitle class="flex">
             <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/cloudflare.svg" class="h-[25px]" alt="Cloudflare Logo">
@@ -21,32 +21,36 @@
             <div class="grid items-center w-full gap-4">
               <div class="flex flex-col space-y-1.5">
                 <Label>{{ $t('Enter Tunnel Connector Token:') }}</Label>
-                <div class="flex w-full items-center gap-1.5">
-                  <HoverCard :open-delay="100" :close-delay="100" v-if="!tipDontShowAgain && token.trim().length === 0">
-                    <HoverCardTrigger as-child>
-                      <Input id="name" placeholder="cloudflared service install eyJhIjoiO34sdfsdf43wrwsefs43csefw3" v-model="token" />
-                    </HoverCardTrigger>
-                    <HoverCardContent class="w-[400px] p-2" style="background-color: #fff">
-                      <h5>💡 {{ $t('Tip') }}</h5>
-                      <hr class="mt-2">
-                      <div class="p-2">
-                        <small>{{ $t('You can also enter the entire command into the input like:') }}
-                          <br>
-                          <code style="border:1px solid hsl(var(--input));border-radius: 5px;padding: 5px;">cloudflared service install eyJhIjoiO...</code>
-                          <br>
-                          {{ $t('The token will be automatically extracted from it.') }}
-                        </small>
-                      </div>
-                      <div class="flex w-full justify-end mt-2">
-                        <Button @click="tipDontShowAgain = true" size="xs" variant="outline">{{ $t('Do not show again') }}</Button>
-                      </div>
-                    </HoverCardContent>
-                  </HoverCard>
-                  <Input id="name" placeholder="cloudflared service install eyJhIjoiO34sdfsdf43wrwsefs43csefw3" v-model="token" :disabled="config.start" v-else/>
-                  <Button v-if="changed || token.trim().length == 0" @click.prevent="save" class="start-btn">{{ $t('Save') }}</Button>
-                  <Button v-else-if="token.trim().length && !empty" @click.prevent="start" class="start-btn" :class="{running: config.start}" :title="config.start ? $t('Cloudflared is currently running') : $t('Cloudflared is not running')">
-                    {{ config.start ? $t('Stop') : $t('Start') }}
-                  </Button>
+                <div class="flex w-full items-center gap-1.5 max-[540px]:flex-col">
+                  <div class="flex-grow w-full">
+                    <HoverCard :open-delay="100" :close-delay="100" v-if="!tipDontShowAgain && token.trim().length === 0">
+                      <HoverCardTrigger as-child>
+                        <Input id="name" placeholder="cloudflared service install eyJhIjoiO34sdfsdf43wrwsefs43csefw3" v-model="token" />
+                      </HoverCardTrigger>
+                      <HoverCardContent class="w-[400px] p-2" style="background-color: #fff">
+                        <h5>💡 {{ $t('Tip') }}</h5>
+                        <hr class="mt-2">
+                        <div class="p-2">
+                          <small>{{ $t('You can also enter the entire command into the input like:') }}
+                            <br>
+                            <code style="border:1px solid hsl(var(--input));border-radius: 5px;padding: 5px;">cloudflared service install eyJhIjoiO...</code>
+                            <br>
+                            {{ $t('The token will be automatically extracted from it.') }}
+                          </small>
+                        </div>
+                        <div class="flex w-full justify-end mt-2">
+                          <Button @click="tipDontShowAgain = true" size="xs" variant="outline">{{ $t('Do not show again') }}</Button>
+                        </div>
+                      </HoverCardContent>
+                    </HoverCard>
+                    <Input id="name" placeholder="cloudflared service install eyJhIjoiO34sdfsdf43wrwsefs43csefw3" v-model="token" :disabled="config.start" v-else/>
+                  </div>
+                  <div>
+                    <Button v-if="changed || token.trim().length == 0" @click.prevent="save" class="start-btn">{{ $t('Save') }}</Button>
+                    <Button v-else-if="token.trim().length && !empty" @click.prevent="start" class="start-btn" :class="{running: config.start}" :title="config.start ? $t('Cloudflared is currently running') : $t('Cloudflared is not running')">
+                      {{ config.start ? $t('Stop') : $t('Start') }}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
