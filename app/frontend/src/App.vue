@@ -123,7 +123,7 @@
           <SelectItem value="en">English (EN)</SelectItem>
           <SelectItem value="zh-CN">中文 (zh-CN)</SelectItem>
           <SelectItem value="de">Deutsch (DE)</SelectItem>
-          <SelectItem value="es-BR">Español (es-BR)</SelectItem>
+          <SelectItem value="pt-BR">Português (pt-BR)</SelectItem>
           <SelectItem value="ru">русский (RU)</SelectItem>
           <SelectItem value="ja">日本語 (JA)</SelectItem>
           <SelectItem value="fr">Français (FR)</SelectItem>
