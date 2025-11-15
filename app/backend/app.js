@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const port = process.env.WEBUI_PORT;
+const host = process.env.WEBUI_HOST ?? '0.0.0.0';
 const path = require('path');
 const bodyParser = require('body-parser')
 const cors = require('cors');
@@ -150,7 +151,7 @@ app.post('/advanced/config/local', (req, res) => {
 })
 
 
-app.listen(port, () => {
+app.listen(port, host, () => {
   console.log('STATUS: Init');
   console.log('ENVIRONMENT: ', JSON.stringify(process.env));
   let config = getConfig();
@@ -161,6 +162,7 @@ app.listen(port, () => {
     }, 2000);
   }
   console.log(`WEBUI PORT: ${port}`);
+  console.log(`WEBUI HOST: ${host}`);
 })
 
 
