@@ -14,7 +14,7 @@ _Cloudflared-web is a docker image that packages both [cloudflared cli](https://
 
 #### Pros
 
-✅ Easy to run-and-forget setup.
+✅ Easy run-and-forget setup.
 
 ✅ Manage cloudflared token from a simple and user-friendly Web UI.
 
