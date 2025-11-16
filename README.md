@@ -14,15 +14,12 @@ _Cloudflared-web is a docker image that packages both [cloudflared cli](https://
 
 #### Pros
 
-✅ Only need to run a docker command once. No need to run docker commands everytime you want to start or stop the container or when updating the token.
+✅ Easy to run-and-forget setup.
+
+✅ Manage cloudflared token from a simple and user-friendly Web UI.
 
 ✅ Start and stop cloudflare tunnel anytime with a single click.
 
-#### Cons
-
-❌ Only supports [Remotely-managed Tunnels](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/configure-tunnels/remote-management/).
-
-❌ Can only update hostname policies through the [ZeroTrust](https://one.dash.cloudflare.com/) dashboard.
 
 
 --- 
@@ -65,8 +62,8 @@ services:
 ### Environment
 | Variable Name     | Default value | Required or Optional | Description                                                                                                                                                                                                                                                                                                                         |
 |-------------------|---------------|---|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| WEBUI_PORT        | 14333         | _Optional_ | The port on the host where the WebUI will be running. Useful when an existing process is running on port `14333` and want to assign cloudflared-web into a different available port.                                                                                                                                                |
 | WEBUI_HOST        | 0.0.0.0         | _Optional_ | This will work if you want the WebUI to listen on a different host address |
+| WEBUI_PORT        | 14333         | _Optional_ | The port on the host where the WebUI will be running. Useful when an existing process is running on port `14333` and want to assign cloudflared-web into a different available port.                                                                                                                                                |
 | BASIC_AUTH_PASS   |               | _Optional_ | Enable Basic Auth by specifying a password. If `BASIC_AUTH_USER` is not specified, the default value for username `admin` will be used.                                                                                                                                                                                             |
 | BASIC_AUTH_USER   | admin         | _Optional_ | Specify the username for the Basic Auth.                                                                                                                                                                                                                                                                                            |
 | EDGE_BIND_ADDRESS |               | _Optional_ | Specifies the outgoing IP address used to establish a connection between `cloudflared` and the Cloudflare global network.<br/><br/>The IP version of `EDGE_BIND_ADDRESS` will override `EDGE_IP_VERSION` (if provided). For example, if you enter an IPv6 source address, `cloudflared` will always connect to an IPv6 destination. |
