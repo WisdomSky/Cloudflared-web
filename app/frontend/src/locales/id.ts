@@ -1,0 +1,28 @@
+export default {
+    'A simple UI to run Cloudflare Tunnel': 'Antarmuka pengguna yang mudah digunakan untuk menjalankan Cloudflare Tunnel',
+    'Enter Tunnel Connector Token:': 'Masukkan Token Tunnel Connector:',
+    'A new version is available!': 'Versi terbaru telah tersedia!',
+    'updateDockerImage': 'Perbarui tag docker image menjadi <strong>{version}</strong> untuk menggunakan versi terbaru.',
+    'Save': 'Simpan',
+    'Cloudflared is currently running': 'Cloudflared saat ini sedang berjalan.',
+    'Cloudflared is not running': 'Cloudflared tidak sedang berjalan.',
+    'Stop': 'Berhenti',
+    'Start': 'Mulai',
+    'You can also enter the entire command into the input like:': 'Masukkan perintah lengkap ke dalam kolom input seperti:',
+    'The token will be automatically extracted from it.': 'Token akan secara otomatis dikeluarkan darinya.',
+    'Do not show again': 'Jangan tampilkan lagi',
+    'Tip': 'Tips',
+    'Local Configuration': 'Konfigurasi Lokal',
+    'Advanced Configuration': 'Konfigurasi Lanjutan',
+    'For advanced Cloudflare Tunnel configuration. See the': 'Untuk konfigurasi lanjutan Cloudflare Tunnel. Lihat',
+    'documentation': 'dokumentasi',
+    'for more information.': 'untuk info lebih lanjut.',
+    'Clear': 'Bersihkan',
+    'Save Config': 'Simpan Konfig',
+    'ZeroTrust Dashboard': 'Dashboard ZeroTrust',
+    'Create a Cloudflare Tunnel': 'Buat Tunnel Cloudflare',
+    'Github': 'Github',
+    'Help and support this project by sponsoring us on': 'DukDukung proyek ini dengan menjadi pendukung kami di Github.',
+    'All sponsors will be listed and featured here in the future.': 'Semua pendukung akan disebutkan dan ditampilkan di sini di kemudian hari..'
+
+}

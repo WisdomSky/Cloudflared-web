@@ -8,6 +8,7 @@ import ru from '@/locales/ru'
 import ja from '@/locales/ja'
 import fr from '@/locales/fr'
 import tr from '@/locales/tr'
+import id from '@/locales/id'
 
 const i18n = createI18n({
     locale: localStorage.getItem('locale') || "en",
@@ -20,7 +21,8 @@ const i18n = createI18n({
         'ru': ru,
         'ja': ja,
         'fr': fr,
-        'tr': tr
+        'tr': tr,
+        'id': id
     }
 })
 
