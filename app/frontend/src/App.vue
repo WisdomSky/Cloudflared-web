@@ -128,6 +128,7 @@
           <SelectItem value="ja">日本語 (JA)</SelectItem>
           <SelectItem value="fr">Français (FR)</SelectItem>
           <SelectItem value="tr">Türkçe (TR)</SelectItem>
+          <SelectItem value="id">Bahasa Indonesia (ID)</SelectItem>
         </SelectContent>
       </Select>
     </div>
