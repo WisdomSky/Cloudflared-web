@@ -22,7 +22,7 @@ export default {
     'ZeroTrust Dashboard': 'Dashboard ZeroTrust',
     'Create a Cloudflare Tunnel': 'Buat Tunnel Cloudflare',
     'Github': 'Github',
-    'Help and support this project by sponsoring us on': 'DukDukung proyek ini dengan menjadi pendukung kami di Github.',
+    'Help and support this project by sponsoring us on': 'Dukung proyek ini dengan menjadi pendukung kami di',
     'All sponsors will be listed and featured here in the future.': 'Semua pendukung akan disebutkan dan ditampilkan di sini di kemudian hari..'
 
 }
