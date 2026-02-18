@@ -10,17 +10,11 @@ _Cloudflared-web is a docker image that packages both [cloudflared cli](https://
 
 ---
 
-## Why use `Cloudflared-web`?
-
-#### Pros
-
 ✅ Easy run-and-forget setup.
 
 ✅ Manage cloudflared token from a simple and user-friendly Web UI.
 
 ✅ Start and stop cloudflare tunnel anytime with a single click.
-
-
 
 --- 
 ## Application Setup
