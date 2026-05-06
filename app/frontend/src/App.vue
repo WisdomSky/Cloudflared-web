@@ -129,6 +129,7 @@
           <SelectItem value="fr">Français (FR)</SelectItem>
           <SelectItem value="tr">Türkçe (TR)</SelectItem>
           <SelectItem value="id">Bahasa Indonesia (ID)</SelectItem>
+          <SelectItem value="bg">Български (BG)</SelectItem>
         </SelectContent>
       </Select>
     </div>
