@@ -90,7 +90,7 @@
 
         </CardFooter>
         <div class="flex items-center justify-center" style="font-size: 0.65em">
-          <a href="https://one.dash.cloudflare.com" target="_blank" class="inline-flex items-center">
+          <a href="https://dash.cloudflare.com/one/" target="_blank" class="inline-flex items-center">
             <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/cloudflare.svg" class="w-[20px] mr-1" alt="Cloudflare Logo">
             {{ $t('ZeroTrust Dashboard') }}
           </a>
