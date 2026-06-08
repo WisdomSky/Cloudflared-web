@@ -85,7 +85,7 @@ services:
 ```
 
 
-### Volume
+### Volumes
 | Container Path | Required or Optional | Description |
 |---|---|---|
 | /config | _Optional_ | The path to the directory where the `config.json` file containing the Cloudflare token and start status will be saved.  |
@@ -100,6 +100,9 @@ services:
     volumes:
       - /mnt/storage/cloudflared/config:/config
 ```
+
+> [!TIP]
+> Binding a volume is very useful for persisting the `token` everytime you update `cloudflared-web` to a newer version.
 
 ## Using Networks
 
