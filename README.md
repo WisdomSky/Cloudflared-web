@@ -119,6 +119,9 @@ services:
       WEBUI_PORT: 1111
 ```
 
+> [!NOTE]
+> For more advanced networking see [Docker Compose Networking](https://docs.docker.com/compose/how-tos/networking/).
+
 ## Screenshots
 
 ![Screenshot 1](https://raw.githubusercontent.com/WisdomSky/Cloudflared-web/main/screenshot-1.png)
