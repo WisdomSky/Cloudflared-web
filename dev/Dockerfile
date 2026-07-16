@@ -1,4 +1,4 @@
-FROM node:18-bookworm-slim
+FROM node:bookworm-slim
 
 ARG TARGETOS
 ARG TARGETARCH
