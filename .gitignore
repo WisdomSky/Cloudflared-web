@@ -7,3 +7,4 @@ app/frontend/dist
 dev/config
 dev/.cloudflared
 .idea
+.DS_Store
