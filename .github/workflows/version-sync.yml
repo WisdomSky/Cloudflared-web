@@ -78,24 +78,3 @@ jobs:
             Release notes: https://github.com/cloudflare/cloudflared/releases/tag/${{ steps.latest_release.outputs.latest_version }}
           branch: version/${{ steps.latest_release.outputs.latest_version }}
           delete-branch: true
-
-      - name: Enable auto-merge
-        if: steps.check_update.outputs.update_needed == 'true' && steps.create_pr.outputs.pull-request-number
-        run: |
-          gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --auto --merge
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Trigger Github workflow
-        if: steps.check_update.outputs.update_needed == 'true'
-        # You may pin to the exact commit or the version.
-        # uses: yakubique/trigger-github-workflow@5dcfcea92d62b4723e3cbad8bc1c415b654d1007
-        uses: yakubique/trigger-github-workflow@v1
-        with:
-          # Owner/repository
-          repository: WisdomSky/Cloudflared-web
-          # Workflow ID or workflow's filename
-          workflow: publish.yml
-          # Github token
-          token: ${{ secrets.GITHUB_TOKEN }}
-          # Reference branch
-          ref: main
