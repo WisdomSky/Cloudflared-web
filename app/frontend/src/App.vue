@@ -3,9 +3,21 @@
     <form id="cf-form" method="post" @submit.prevent class="w-full max-w-[650px] mx-auto px-4 min-w-[320px]">
       <Card class="w-full">
         <CardHeader>
-          <CardTitle class="flex">
-            <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/cloudflare.svg" class="h-[25px]" alt="Cloudflare Logo">
-            <span class="ml-3">Cloudflared-web</span>
+          <CardTitle class="flex w-full items-center justify-between">
+            <div class="flex items-center">
+              <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/cloudflare.svg" class="h-[25px]" alt="Cloudflare Logo">
+              <span class="ml-3">Cloudflared-web</span>
+            </div>
+            <HoverCard :open-delay="100" :close-delay="100">
+              <HoverCardTrigger as-child>
+                <Button as="a" href="https://dash.cloudflare.com/?to=/:account/tunnels/create" target="_blank" size="xs" variant="outline" class="create-btn rounded-full border-[#c98816] text-white hover:bg-[#c98816] hover:text-white">
+                  + {{ $t('New Tunnel') }}
+                </Button>
+              </HoverCardTrigger>
+              <HoverCardContent side="top" :side-offset="12" class="w-auto p-2" style="background-color: #fff">
+                <small>{{ $t('Create a Cloudflare Tunnel') }}</small>
+              </HoverCardContent>
+            </HoverCard>
           </CardTitle>
           <CardDescription>{{ $t('A simple UI to run Cloudflare Tunnel') }}</CardDescription>
         </CardHeader>
@@ -90,13 +102,13 @@
 
         </CardFooter>
         <div class="flex items-center justify-center" style="font-size: 0.65em">
-          <a href="https://dash.cloudflare.com/one/" target="_blank" class="inline-flex items-center">
+          <a href="https://dash.cloudflare.com/?to=/:account/tunnels" target="_blank" class="inline-flex items-center">
             <img src="https://raw.githubusercontent.com/rdimascio/icons/master/icons/cloudflare.svg" class="w-[20px] mr-1" alt="Cloudflare Logo">
-            {{ $t('ZeroTrust Dashboard') }}
+            {{ $t('Go to my Tunnels Dashboard') }}
           </a>
           <div class="inline mx-3" style="color: #777">|</div>
-          <a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/install-and-setup/tunnel-guide/remote/#1-create-a-tunnel" target="_blank" class="inline-flex">
-            {{ $t('Create a Cloudflare Tunnel') }}
+          <a href="https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/" target="_blank" class="inline-flex">
+            {{ $t('Get Started with Cloudflare Tunnels') }}
           </a>
           <div class="inline mx-3" style="color: #777">|</div>
           <a href="https://github.com/WisdomSky/Cloudflared-web" target="_blank" class="inline-flex items-center">
@@ -305,6 +317,19 @@
 <style scoped lang="scss">
 
 .cf-container {
+
+  a.create-btn {
+    background-color: #c98816;
+    transition: transform 0.15s ease-in;
+    transform-origin: center;
+
+    &:hover {
+      text-decoration: none;
+      outline: 1px solid #fff;
+      transform: scale(1.1);
+    }
+
+  }
 
   button.start-btn {
     background-color: #c98816;

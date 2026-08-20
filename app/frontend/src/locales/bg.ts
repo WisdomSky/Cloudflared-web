@@ -21,6 +21,7 @@ export default {
     'Save Config': 'Запази настройките',
     'ZeroTrust Dashboard': 'Zero Trust табло',
     'Create a Cloudflare Tunnel': 'Създаване на Cloudflare Tunnel',
+    'New Tunnel': 'Нов тунел',
     'Github': 'GitHub',
     'Help and support this project by sponsoring us on': 'Подкрепете проекта, като ни спонсорирате в',
     'All sponsors will be listed and featured here in the future.': 'Всички спонсори ще бъдат показани и отличени тук в бъдеще.'
