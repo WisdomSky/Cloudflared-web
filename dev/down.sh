@@ -1,4 +1,4 @@
 #!/bin/bash
 
-sudo docker compose down
-sudo docker rmi -f cloudflared-web
+docker compose down
+docker rmi -f cloudflared-web
