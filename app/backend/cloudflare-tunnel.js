@@ -32,6 +32,8 @@ class CloudflaredTunnel {
 
         this.url = "http://localhost:80";
         this.hostname = "";
+        this._stopping = false;
+        this._restartTimer = null;
     }
 
     get token() {
@@ -145,6 +147,13 @@ class CloudflaredTunnel {
 
         console.log('EXEC COMMAND: ', args.join(' '));
 
+        this._stopping = false;
+        this._additionalArgs = additionalArgs;
+        if (this._restartTimer) {
+            clearTimeout(this._restartTimer);
+            this._restartTimer = null;
+        }
+
         this.emitChange("Starting cloudflared");
         this.childProcess = childProcess.spawn(this.cloudflaredPath, args);
         this.childProcess.stdout.pipe(process.stdout);
@@ -153,6 +162,15 @@ class CloudflaredTunnel {
         this.childProcess.on("close", (code) => {
             this.childProcess = null;
             this.emitChange("Stopped cloudflared", code);
+
+            // cloudflared exits fatally when the very first edge lookup fails
+            // (e.g. DNS not ready yet right after the host boots). Restart it
+            // unless stop() was called or auto-restart is explicitly disabled.
+            if (!this._stopping && process.env.AUTO_RESTART !== "false") {
+                const delay = parseInt(process.env.RESTART_DELAY ?? "10", 10);
+                this.emitChange(`cloudflared exited unexpectedly (code ${code}). Restarting in ${delay}s`);
+                this._restartTimer = setTimeout(() => this.start(this._additionalArgs), delay * 1000);
+            }
         });
 
         this.childProcess.on("error", (err) => {
@@ -173,6 +191,11 @@ class CloudflaredTunnel {
 
     stop() {
         this.emitChange("Stopping cloudflared");
+        this._stopping = true;
+        if (this._restartTimer) {
+            clearTimeout(this._restartTimer);
+            this._restartTimer = null;
+        }
         if (this.childProcess) {
             this.childProcess.kill("SIGINT");
             this.childProcess = null;
