@@ -25,6 +25,9 @@
 const childProcess = require("child_process");
 const commandExistsSync = require("command-exists").sync;
 
+// Delay between relaunch attempts after an unexpected cloudflared exit.
+const RESTART_DELAY_SECONDS = 10;
+
 class CloudflaredTunnel {
 
     constructor(cloudflaredPath = "cloudflared") {
@@ -32,6 +35,8 @@ class CloudflaredTunnel {
 
         this.url = "http://localhost:80";
         this.hostname = "";
+        this._stopping = false;
+        this._restartTimer = null;
     }
 
     get token() {
@@ -145,6 +150,13 @@ class CloudflaredTunnel {
 
         console.log('EXEC COMMAND: ', args.join(' '));
 
+        this._stopping = false;
+        this._additionalArgs = additionalArgs;
+        if (this._restartTimer) {
+            clearTimeout(this._restartTimer);
+            this._restartTimer = null;
+        }
+
         this.emitChange("Starting cloudflared");
         this.childProcess = childProcess.spawn(this.cloudflaredPath, args);
         this.childProcess.stdout.pipe(process.stdout);
@@ -153,6 +165,14 @@ class CloudflaredTunnel {
         this.childProcess.on("close", (code) => {
             this.childProcess = null;
             this.emitChange("Stopped cloudflared", code);
+
+            // cloudflared exits fatally when the very first edge lookup fails
+            // (e.g. DNS not ready yet right after the host boots). Relaunch the
+            // child process, keeping the WebUI alive, unless stop() was called.
+            if (!this._stopping) {
+                this.emitChange(`cloudflared exited unexpectedly (code ${code}). Restarting in ${RESTART_DELAY_SECONDS}s`);
+                this._restartTimer = setTimeout(() => this.start(this._additionalArgs), RESTART_DELAY_SECONDS * 1000);
+            }
         });
 
         this.childProcess.on("error", (err) => {
@@ -173,6 +193,11 @@ class CloudflaredTunnel {
 
     stop() {
         this.emitChange("Stopping cloudflared");
+        this._stopping = true;
+        if (this._restartTimer) {
+            clearTimeout(this._restartTimer);
+            this._restartTimer = null;
+        }
         if (this.childProcess) {
             this.childProcess.kill("SIGINT");
             this.childProcess = null;
